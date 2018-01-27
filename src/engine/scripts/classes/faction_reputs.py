@@ -10,7 +10,7 @@ class FactionReput(object):
     def add_faction(self, faction):
         factionName = faction.get_name()
         if factionName in self.__faction_map:
-            raise ValueError('Faction {0} already has a reput'.format(factionName))
+            raise ValueError('{0} already has a reput'.format(faction))
         self.__faction_map[factionName] = self.__get_default_faction_object(faction)
 
     def __get_default_faction_object(faction):
