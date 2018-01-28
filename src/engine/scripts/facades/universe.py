@@ -1,11 +1,18 @@
 """ Container for Universe
 """
+import random
+from scripts.classes.galaxy import Galaxy
 
 
 class Universe(object):
 
+    initial_galaxies = 8
+
     def __init__(self):
         self.__galaxies = []
+        self.__starting_galaxy = None
+        self.__starting_sector = None
+        self.__starting_system = None
 
     def get_galaxies(self):
         return self.__galaxies
@@ -35,3 +42,26 @@ class Universe(object):
 
     def __remove_galaxy(self, galaxy_index):
         del self.__galaxies[galaxy_index]
+
+    def generate(self):
+        for _ in range(self.initial_galaxies):
+            galaxy = Galaxy()
+            galaxy.generate()
+            self.add_galaxy(galaxy)
+        self.__starting_galaxy = Galaxy()
+        self.__starting_galaxy.set_as_tutorial()
+        self.__starting_sector = self.__starting_galaxy.get_sectors()[0]
+        self.__starting_system = self.__starting_sector.get_systems()[0]
+
+    @staticmethod
+    def get_random_index(self, given_array):
+        return random.randint(0, len(given_array) - 1)
+
+    def get_starting_galaxy(self):
+        return self.__starting_galaxy
+
+    def get_starting_sector(self):
+        return self.__starting_sector
+
+    def get_starting_system(self):
+        return self.__starting_system

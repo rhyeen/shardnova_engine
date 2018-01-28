@@ -1,8 +1,12 @@
 """ Container for Sector
 """
+import random
+from scripts.classes.system import System
 
 
 class Sector(object):
+
+    max_systems = 8
 
     def __init__(self, name=None):
         self.__systems = []
@@ -47,3 +51,16 @@ class Sector(object):
 
     def __remove_system(self, system_index):
         del self.__systems[system_index]
+
+    def generate(self):
+        total = random.randint(1, self.max_systems)
+        for _ in range(total):
+            system = System()
+            system.generate()
+            self.add_system(system)
+
+    def set_as_tutorial(self):
+        self.__systems = []
+        system = System()
+        system.set_as_tutorial()
+        self.add_system(system)

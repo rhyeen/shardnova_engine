@@ -10,7 +10,7 @@ class Drone(ABC):
         self.__data_handler = data_handler
         self.__id = self.__get_unique_id()
         self.__inventory = self._get_default_inventory()
-        self.__coordinates = Coordinates()
+        self.coordinates = Coordinates()
 
     def __str__(self):
         return 'Drone: {0}'.format(self.get_id())
@@ -29,5 +29,5 @@ class Drone(ABC):
     def get_inventory(self):
         return self.__inventory
 
-    def get_coordinates(self):
-        return self.__coordinates
+    def tick(self):
+        self.coordinates.tick()

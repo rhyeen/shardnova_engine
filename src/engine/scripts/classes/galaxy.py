@@ -1,8 +1,12 @@
 """ Container for Galaxy
 """
+import random
+from scripts.classes.sector import Sector
 
 
 class Galaxy(object):
+
+    max_sectors = 8
 
     def __init__(self, name=None):
         self.__sectors = []
@@ -47,3 +51,16 @@ class Galaxy(object):
 
     def __remove_sector(self, sector_index):
         del self.__sectors[sector_index]
+
+    def generate(self):
+        total = random.randint(1, self.max_sectors)
+        for _ in range(total):
+            sector = Sector()
+            sector.generate()
+            self.add_sector(sector)
+
+    def set_as_tutorial(self):
+        self.__sectors = []
+        sector = Sector()
+        sector.set_as_tutorial()
+        self.add_sector(sector)

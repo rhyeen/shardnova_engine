@@ -19,9 +19,6 @@ class CelestialBody(ABC):
     def get_satellites(self):
         return self.__satellites
 
-    def set_satellites(self, satellites):
-        self.__satellites = satellites
-
     def add_satellite(self, satellite):
         if self.__satellite_exists(satellite):
             return

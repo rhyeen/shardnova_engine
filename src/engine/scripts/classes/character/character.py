@@ -11,7 +11,7 @@ class Character(ABC):
     def __init__(self):
         self.__bank = Bank()
         self.__faction_reputs = FactionReputs()
-        self.__drone_warehouse = DroneWarehouse()
+        self.drone_warehouse = DroneWarehouse()
 
     def get_bank(self):
         return self.__bank
@@ -20,4 +20,8 @@ class Character(ABC):
         return self.__faction_reputs
 
     def get_drone_warehouse(self):
-        return self.__drone_warehouse
+        return self.drone_warehouse
+
+    def tick(self):
+        for drone in self.get_active_drones():
+            drone.tick()
