@@ -9,8 +9,8 @@ class Course(object):
         self.__destination = destination_celestial_body
         self.__source = self.__get_source()
         self.__distance_to_destination = self.__get_distance_to_destination()
-        self.__distance_traveled_per_tick = self.__get_distance_traveled_per_tick()
         self.__finished = False
+        self.__paused = False
 
     def __get_source(self):
         coordinates = self.__drone.get_coordinates()
@@ -51,20 +51,44 @@ class Course(object):
         system = coordinates.get_system()
         return system.get_distance_between_celestial_bodies(source, destination)
 
+    def get_source(self):
+        return self.__source
+
     def get_destination(self):
         return self.__destination
 
     def is_finished(self):
         return self.__finished
 
+    def is_paused(self):
+        return self.__paused
+
+    def pause_course(self):
+        self.__paused = True
+
+    def resume_course(self):
+        if self.__drone.fuel < self.get_required_fuel_for_course():
+            return False
+        self.__paused = False
+        return True
+
     def tick(self):
+        if self.__paused:
+            return
         self.__decrement_distance()
         self.__finished = self.__distance_to_destination == 0
 
     def __decrement_distance(self):
-        self.__distance_to_destination -= self.__distance_traveled_per_tick
+        self.__distance_to_destination -= self.__drone.get_distance_per_tick()
         if self.__distance_to_destination < 0:
             self.__distance_to_destination = 0
 
     def get_distance_to_destination(self):
         return self.__distance_to_destination
+
+    def get_distance_per_tick(self):
+        return self.__drone.get_distance_per_tick()
+
+    def get_required_fuel_for_course(self):
+        fuel_per_distance = self.__drone.get_fuel_per_distance()
+        return fuel_per_distance * self.__get_distance_to_destination()

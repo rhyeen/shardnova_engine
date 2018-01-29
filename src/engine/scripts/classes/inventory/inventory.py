@@ -56,3 +56,6 @@ class Inventory(ABC):
         if self.__slot_out_of_bounds():
             return
         self.__max_slots[slot] = None
+
+    def get_all_items(self):
+        return filter(lambda x: x is not None, self._slots)

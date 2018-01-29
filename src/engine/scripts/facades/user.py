@@ -6,8 +6,9 @@ from scripts.classes.character.player_character import PlayerCharacter
 
 class User(object):
 
-    def __init__(self, data_handler, user_id=None):
+    def __init__(self, data_handler, output_handler, user_id=None):
         self.__data_handler = data_handler
+        self.output_handler = output_handler
         self.__account_details = AccountDetails()
         self.character = PlayerCharacter()
         if user_id is None:
@@ -46,6 +47,9 @@ class User(object):
 
     def set_primary_phone(self, phone):
         self.get_phone_book().set_primary_phone_number(phone)
+
+    def get_primary_phone(self):
+        return self.get_phone_book().get_primary_phone_number()
 
     def tick(self):
         self.character.tick()
