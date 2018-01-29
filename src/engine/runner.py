@@ -2,20 +2,26 @@
 """
 import argparse
 
-from scripts.bootstrapper import Bootstrapper
+from scripts.tick_bootstrapper import TickBootstrapper
+from scripts.user_bootstrapper import UserBootstrapper
 from tools.log_manager import LogManager
 
 
-def get_config():
+def get_args():
     description = ('Runs the Shardnova Backend Engine')
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-e',
                         '--environment',
                         default='local',
                         help='environment in which the script is running: local, stage, prod, test')
+    parser.add_argument('-i',
+                        '--interface',
+                        default='time',
+                        help='type of console to run: time, user')
     parsed = parser.parse_args()
     environment = parsed.environment
-    return environment
+    interface = parsed.interface
+    return environment, interface
 
 
 def main():
@@ -23,11 +29,16 @@ def main():
     """
     log_manager = None
     try:
-        config, environment = get_config()
-        log_manager = LogManager(script_id='Enginer',
+        environment, interface = get_args()
+        log_manager = LogManager(script_id='Engine',
                                  project_id='Shardnova',
                                  environment=environment)
-        bootstrapper = Bootstrapper(log_manager, environment)
+        if interface == 'time':
+            bootstrapper = TickBootstrapper(log_manager, environment)
+        elif interface == 'user':
+            bootstrapper = UserBootstrapper(log_manager, environment)
+        else:
+            raise ValueError('Invalid interface: {0}'.format(interface))
         bootstrapper.execute()
         log_manager.record_cached_logs()
     except KeyboardInterrupt:

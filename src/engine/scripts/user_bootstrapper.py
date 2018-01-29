@@ -1,11 +1,12 @@
-""" Container for Bootstrapper
+""" Container for UserBootstrapper
 """
+from scripts.facades.game import Game
+from scripts.interfaces.data_handler.random_string_test_handler import RandomStringTestHandler
+from scripts.presenters.console_user import ConsoleUser
+from scripts.controllers.interactor import Interactor
 
-from tools.http_requester import HttpRequester
-from tools.query_handler import QueryHandler
-from scripts.query_maker import QueryMaker
 
-class Bootstrapper(object):
+class UserBootstrapper(object):
     """ Class definition
     """
 
@@ -22,7 +23,6 @@ class Bootstrapper(object):
         self.test_config = test_config
         self.environment = environment
         self._is_test = self._is_test_run()
-        self._query_handler = QueryHandler(environment)
 
     def _is_test_run(self):
         if not self.environment:
@@ -33,23 +33,8 @@ class Bootstrapper(object):
         """ Runs the entire automation.
             See the individual function definitions for more details.
         """
-        pass
-
-    def call_mysql_database(self):
-        """ Typical method for making MySQL queries and returning responses.
-        """
-        params = {
-            'test_column': 'test',
-            'test_other_name': True,
-            'test_flag': 999
-        }
-        # returns the response in Python dict format
-        query = QueryMaker.get_test_query
-        # optional: only keep if query needs function_args passed in.
-        query_function_args = {
-            'is_test': self._is_test
-        }
-        results = self._query_handler.get_query_results(query, params, query_function_args)
-        if len(results) <= 0:
-            return None
-        return results[0]['test_column']
+        game = Game()
+        data_hander = RandomStringTestHandler()
+        interactor = Interactor(data_hander, game)
+        interactor.initialize_game()
+        ConsoleUser(interactor)

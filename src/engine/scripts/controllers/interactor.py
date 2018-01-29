@@ -42,10 +42,10 @@ class Interactor(object):
         course = Course(drone, celestial_body)
         fuel_use = course.get_required_fuel_for_course()
         if fuel_use > drone.fuel:
-            user.output_handler.insufficient_fuel(fuel_use, drone.fuel)
+            user.output_handler.insufficient_fuel(celestial_body, fuel_use, drone.fuel)
             return
         drone.coordinates.set_course(course)
-        self.check_course(user, drone)
+        self.check_course(user, drone, celestial_body, fuel_use)
 
     def __get_celestial_body(self, drone, destination_index):
         if destination_index < 0:
@@ -55,7 +55,7 @@ class Interactor(object):
             return None
         return celestial_bodies[destination_index]
 
-    def check_course(self, user, drone, fuel_use=None):
+    def check_course(self, user, drone, celestial_body=None, fuel_use=None):
         course = drone.coordinates.get_course()
         if course is None:
             user.output_handler.no_course()
@@ -64,6 +64,6 @@ class Interactor(object):
         distance_per_tick = course.get_distance_per_tick()
         ticks_to_finished = distance_to_destination / distance_per_tick
         if fuel_use is None:
-            user.output_handler.check_course(distance_to_destination, ticks_to_finished, drone.fuel)
+            user.output_handler.check_course(celestial_body, distance_to_destination, ticks_to_finished, drone.fuel)
             return
-        user.output_handler.on_course(fuel_use, drone.fuel, distance_to_destination, ticks_to_finished)
+        user.output_handler.on_course(fuel_use, drone.fuel, celestial_body, distance_to_destination, ticks_to_finished)

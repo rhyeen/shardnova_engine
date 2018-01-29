@@ -10,15 +10,15 @@ class OutputHandler(ABC):
         pass
 
     @abstractmethod
-    def on_course(self, fuel_use, drone_fuel, distance_to_destination, ticks_to_finished):
+    def on_course(self, fuel_use, drone_fuel, destination, distance, ticks_to_finished):
         pass
 
     @abstractmethod
-    def insufficient_fuel(self, fuel_use, drone_fuel):
+    def insufficient_fuel(self, destination, fuel_use, drone_fuel):
         pass
 
     @abstractmethod
-    def check_course(self, distance_to_destination, ticks_to_finished, drone_fuel):
+    def check_course(self, destination, distance, ticks_to_finished, drone_fuel):
         pass
 
     @abstractmethod
