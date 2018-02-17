@@ -9,6 +9,7 @@ class Bank(object):
         self.__universal_federation_account = None
         self.__primary_account = self.__get_default_primary_account()
 
+    @staticmethod
     def __get_default_primary_account():
         return 'ufa'
 

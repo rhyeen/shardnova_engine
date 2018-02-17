@@ -4,7 +4,7 @@ import random
 from scripts.classes.orbital_plane import OrbitalPlane
 from scripts.classes.celestial_body.star import Star
 from scripts.classes.celestial_body.starting_factory import StartingFactory
-from scripts.classes.celestial_body.hyperspace_gate import HyperspaceGate
+from scripts.classes.satellite.hyperspace_gate import HyperspaceGate
 from scripts.classes.celestial_body.beacon import Beacon
 from scripts.classes.celestial_body.planet import Planet
 
@@ -14,7 +14,7 @@ class System(object):
     max_celestial_bodies = 8
     max_orbital_distance = 20
 
-    def __init__(self, name, data_handler):
+    def __init__(self, data_handler, name=None):
         self.__data_handler = data_handler
         self.__orbital_plane = OrbitalPlane()
         self.__starting_factory = None
@@ -42,19 +42,19 @@ class System(object):
 
     def generate(self):
         total = random.randint(1, self.max_celestial_bodies)
-        self.__orbital_plane.push(Star())
+        self.__orbital_plane.push(Star(self.__data_handler))
         for index in range(total - 1):
             # @TODO: alter it to allow for different types of celestial bodies
-            self.__orbital_plane.push(Planet(), random.randint(1, self.max_orbital_distance))
+            self.__orbital_plane.push(Planet(self.__data_handler), random.randint(1, self.max_orbital_distance))
 
     def set_as_tutorial(self):
-        self.__orbital_plane = []
-        self.__orbital_plane.push(Star())
-        self.__orbital_plane.push(Planet())
-        self.__starting_factory = StartingFactory()
+        self.__orbital_plane = OrbitalPlane()
+        self.__orbital_plane.push(Star(self.__data_handler))
+        self.__orbital_plane.push(Planet(self.__data_handler))
+        self.__starting_factory = StartingFactory(self.__data_handler)
         self.__orbital_plane.push(self.__starting_factory)
-        beacon = Beacon()
-        hyperspace_gate = HyperspaceGate()
+        beacon = Beacon(self.__data_handler)
+        hyperspace_gate = HyperspaceGate(self.__data_handler)
         beacon.add_satellite(hyperspace_gate)
         self.__orbital_plane.push(beacon)
 

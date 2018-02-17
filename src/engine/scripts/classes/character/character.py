@@ -26,5 +26,5 @@ class Character(ABC):
         return active_drones[0]
 
     def tick(self):
-        for drone in self.get_active_drones():
+        for drone in self.drone_warehouse.get_active_drones():
             drone.tick()

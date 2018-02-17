@@ -11,7 +11,7 @@ class Node(object):
         self.prev_edge = None
 
 
-class Graph(object):
+class OrbitalPlane(object):
     def __init__(self):
         self.first_node = None
         self.last_node = None
@@ -108,9 +108,3 @@ class Graph(object):
             raise ValueError('second celestial body, {0} not within orbital plane'
                              .format(body2))
         return distances[body2.get_id()]
-
-
-class OrbitalPlane(object):
-
-    def __init__(self):
-        self.__plane = Graph()

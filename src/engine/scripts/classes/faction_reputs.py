@@ -2,7 +2,7 @@
 """
 
 
-class FactionReput(object):
+class FactionReputs(object):
 
     def __init__(self):
         self.__faction_map = {}

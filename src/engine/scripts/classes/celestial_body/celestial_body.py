@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 
 class CelestialBody(ABC):
 
-    def __init__(self, name, data_handler):
+    def __init__(self, data_handler, name=None):
         self._data_handler = data_handler
         self.__satellites = []
         if name is None:

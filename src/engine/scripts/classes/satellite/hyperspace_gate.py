@@ -5,9 +5,9 @@ from scripts.classes.satellite.satellite import Satellite
 
 class HyperspaceGate(Satellite):
 
-    def __init__(self):
+    def __init__(self, data_handler):
         self.__jump_points = []
-        super().__init__()
+        super().__init__(data_handler)
 
     def get_jump_points(self):
         return self.__jump_points

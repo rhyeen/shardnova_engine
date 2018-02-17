@@ -5,7 +5,8 @@ from abc import ABC
 
 class Satellite(ABC):
 
-    def __init__(self):
+    def __init__(self, data_handler):
+        self.__data_handler = data_handler
         self.__id = self.__get_unique_id()
 
     def __str__(self):

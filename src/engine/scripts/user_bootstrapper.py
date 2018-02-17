@@ -33,8 +33,8 @@ class UserBootstrapper(object):
         """ Runs the entire automation.
             See the individual function definitions for more details.
         """
-        game = Game()
         data_hander = RandomStringTestHandler()
+        game = Game(data_hander)
         interactor = Interactor(data_hander, game)
         interactor.initialize_game()
         ConsoleUser(interactor)

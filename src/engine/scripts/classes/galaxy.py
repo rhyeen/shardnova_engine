@@ -8,8 +8,9 @@ class Galaxy(object):
 
     max_sectors = 8
 
-    def __init__(self, name=None):
+    def __init__(self, data_handler, name=None):
         self.__sectors = []
+        self.__data_handler = data_handler
         if name is None:
             name = self.__get_unique_name()
         self.__name = name
@@ -55,12 +56,12 @@ class Galaxy(object):
     def generate(self):
         total = random.randint(1, self.max_sectors)
         for _ in range(total):
-            sector = Sector()
+            sector = Sector(self.__data_handler)
             sector.generate()
             self.add_sector(sector)
 
     def set_as_tutorial(self):
         self.__sectors = []
-        sector = Sector()
+        sector = Sector(self.__data_handler)
         sector.set_as_tutorial()
         self.add_sector(sector)

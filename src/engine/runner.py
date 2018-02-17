@@ -4,6 +4,7 @@ import argparse
 
 from scripts.tick_bootstrapper import TickBootstrapper
 from scripts.user_bootstrapper import UserBootstrapper
+from scripts.thread_bootstrapper import ThreadBootstrapper
 from tools.log_manager import LogManager
 
 
@@ -16,8 +17,8 @@ def get_args():
                         help='environment in which the script is running: local, stage, prod, test')
     parser.add_argument('-i',
                         '--interface',
-                        default='time',
-                        help='type of console to run: time, user')
+                        default='thread',
+                        help='type of console to run: thread, time, user')
     parsed = parser.parse_args()
     environment = parsed.environment
     interface = parsed.interface
@@ -33,7 +34,9 @@ def main():
         log_manager = LogManager(script_id='Engine',
                                  project_id='Shardnova',
                                  environment=environment)
-        if interface == 'time':
+        if interface == 'thread':
+            bootstrapper = ThreadBootstrapper(log_manager, environment)
+        elif interface == 'time':
             bootstrapper = TickBootstrapper(log_manager, environment)
         elif interface == 'user':
             bootstrapper = UserBootstrapper(log_manager, environment)

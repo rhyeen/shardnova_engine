@@ -8,8 +8,9 @@ class Sector(object):
 
     max_systems = 8
 
-    def __init__(self, name=None):
+    def __init__(self, data_handler, name=None):
         self.__systems = []
+        self.__data_handler = data_handler
         if name is None:
             name = self.__get_unique_name()
         self.__name = name
@@ -55,12 +56,12 @@ class Sector(object):
     def generate(self):
         total = random.randint(1, self.max_systems)
         for _ in range(total):
-            system = System()
+            system = System(self.__data_handler)
             system.generate()
             self.add_system(system)
 
     def set_as_tutorial(self):
         self.__systems = []
-        system = System()
+        system = System(self.__data_handler)
         system.set_as_tutorial()
         self.add_system(system)

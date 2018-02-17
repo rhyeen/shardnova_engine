@@ -1,14 +1,17 @@
-""" Container for TickBootstrapper
+""" Container for ThreadBootstrapper
 """
 from scripts.facades.game import Game
 from scripts.interfaces.data_handler.random_string_test_handler import RandomStringTestHandler
-from scripts.presenters.console_ticker import ConsoleTicker
+from scripts.presenters.thread_ticker import ThreadTicker
+from scripts.presenters.thread_console_user import ThreadConsoleUser
 from scripts.controllers.interactor import Interactor
 from scripts.controllers.time_keeper import TimeKeeper
+from scripts.kill_switch import KillSwitch
 
 
-class TickBootstrapper(object):
-    """ Class definition
+class ThreadBootstrapper(object):
+    """ The threadbootstrapper starts up a single console user
+        interface and threaded auto ticker.
     """
 
     def __init__(self, log_manager, environment, test_config=None):
@@ -39,5 +42,15 @@ class TickBootstrapper(object):
         interactor = Interactor(data_hander, game)
         interactor.initialize_game()
         time_keeper = TimeKeeper(game)
-        console_ticker = ConsoleTicker()
-        console_ticker.start_console(time_keeper)
+        kill_switch = KillSwitch()
+        thread_ticker = ThreadTicker(time_keeper, kill_switch)
+        ticking_thread = thread_ticker.get_thread()
+        thread_console_user = ThreadConsoleUser(interactor, kill_switch)
+        user_thread = thread_console_user.get_thread()
+        try:
+            ticking_thread.start()
+            user_thread.start()
+            ticking_thread.join()
+            user_thread.join()
+        except KeyboardInterrupt:
+            kill_switch.flip_to_kill()

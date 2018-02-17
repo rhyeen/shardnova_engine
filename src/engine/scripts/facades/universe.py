@@ -8,11 +8,12 @@ class Universe(object):
 
     initial_galaxies = 8
 
-    def __init__(self):
+    def __init__(self, data_handler):
         self.__galaxies = []
         self.__starting_galaxy = None
         self.__starting_sector = None
         self.__starting_system = None
+        self.__data_handler = data_handler
 
     def get_galaxies(self):
         return self.__galaxies
@@ -45,10 +46,10 @@ class Universe(object):
 
     def generate(self):
         for _ in range(self.initial_galaxies):
-            galaxy = Galaxy()
+            galaxy = Galaxy(self.__data_handler)
             galaxy.generate()
             self.add_galaxy(galaxy)
-        self.__starting_galaxy = Galaxy()
+        self.__starting_galaxy = Galaxy(self.__data_handler)
         self.__starting_galaxy.set_as_tutorial()
         self.__starting_sector = self.__starting_galaxy.get_sectors()[0]
         self.__starting_system = self.__starting_sector.get_systems()[0]

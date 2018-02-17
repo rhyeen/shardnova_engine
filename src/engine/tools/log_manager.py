@@ -27,7 +27,6 @@ class LogManager(object):
             script_id (STR): Name of the parent script that logged.
             project_id (STR): Name of the project which triggered the log.
             routing_key (STR): Routing key of the team that will receive alerts
-            documentation (STR):  Documentation to reference when investigating logs
             environment (STR): environment in which the script is running: local, stage, prod, test
             log_table (STR): Table to log to
         """
@@ -79,8 +78,7 @@ class LogManager(object):
             'script_id': self.script_id,
             'message_id': message_id,
             'message_type': message_type,
-            'message': message,
-            'documentation': self.documentation
+            'message': message
         }
         query_function_args = {
             'table': self._log_table
