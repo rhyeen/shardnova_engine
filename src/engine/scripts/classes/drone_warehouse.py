@@ -1,14 +1,15 @@
 """ Container for DroneWarehouse
 """
+from scripts.classes.drone.probe_drone import ProbeDrone
 
 
 class DroneWarehouse(object):
 
-    def __init__(self):
+    def __init__(self, data_handler):
+        self.__data_handler = data_handler
         self.__active_drones = []
         self.__inactive_drones = []
         self.__killed_drones = []
-        self.__primary_drone = None
 
     def get_active_drones(self):
         return self.__active_drones
@@ -20,11 +21,7 @@ class DroneWarehouse(object):
         return self.__killed_drones
 
     def add_drone(self, drone):
-        if (self.__drone_exists(self.__inactive_drones, drone) or
-                self.__drone_exists(self.__active_drones, drone) or
-                self.__drone_exists(self.__killed_drones, drone)):
-            return
-        self.__add_drone(self.__inactive_drones, drone)
+        self._add_drone(self.__inactive_drones, drone)
 
     def __drone_exists(self, group, drone):
         return self.__get_drone_index(group, drone) is not None
@@ -36,8 +33,11 @@ class DroneWarehouse(object):
                 return index
         return None
 
-    @staticmethod
-    def __add_drone(group, drone):
+    def __add_drone(self, group, drone):
+        if (self.__drone_exists(self.__inactive_drones, drone) or
+                self.__drone_exists(self.__active_drones, drone) or
+                self.__drone_exists(self.__killed_drones, drone)):
+            return
         group.append(drone)
 
     def deactivate_drone(self, drone):
@@ -66,3 +66,18 @@ class DroneWarehouse(object):
             self.__move_drone(self.__inactive_drones, self.__killed_drones, drone)
         else:
             raise ValueError('{0} is not an active or inactive drone.'.format(drone))
+
+    def load_file(self, game_file, universe):
+        self.__load_drone_group(game_file['activeDrones'], self.__active_drones, universe)
+        self.__load_drone_group(game_file['inactiveDrones'], self.__inactive_drones, universe)
+        self.__load_drone_group(game_file['killedDrones'], self.__killed_drones, universe)
+
+    def __load_drone_group(self, game_file, group, universe):
+        for drone_file in game_file:
+            drone_type = drone_file['type']
+            if drone_type == 'probe':
+                drone = ProbeDrone(self.__data_handler)
+            else:
+                raise ValueError('Drone of type "{0}" unsupported'.format(drone_type))
+            drone.load_file(drone_file, universe)
+            self.__add_drone(group, drone)

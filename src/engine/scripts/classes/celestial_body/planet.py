@@ -10,3 +10,6 @@ class Planet(CelestialBody):
 
     def __str__(self):
         return 'Planet: {0}'.format(self.get_name())
+
+    def _load_file_specifics(self, game_file):
+        pass

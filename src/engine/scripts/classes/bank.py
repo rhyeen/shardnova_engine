@@ -1,5 +1,7 @@
 """ Container for <I> Bank
 """
+from scripts.classes.bank_account.black_market_account import BlackMarketAccount
+from scripts.classes.bank_account.universal_federation_account import UniversalFederationAccount
 
 
 class Bank(object):
@@ -35,3 +37,10 @@ class Bank(object):
 
     def set_universal_federation_account_as_primary_account(self):
         self.__primary_account = 'ufa'
+
+    def load_file(self, game_file):
+        self.__primary_account = game_file['primaryAccount']
+        self.__universal_federation_account = UniversalFederationAccount()
+        self.__universal_federation_account.load_file(game_file['universalFederationAccount'])
+        self.__black_market_account = BlackMarketAccount()
+        self.__black_market_account.load_file(game_file['blackMarketAccount'])

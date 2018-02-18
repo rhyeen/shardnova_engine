@@ -18,6 +18,15 @@ class Universe(object):
     def get_galaxies(self):
         return self.__galaxies
 
+    def get_galaxy(self, name):
+        if not self.__galaxy_name_exists(name):
+            raise ValueError('{0} is not found.'.format(name))
+        index = self.__get_galaxy_index_named(name)
+        self.__get_galaxy(self, index)
+
+    def __get_galaxy(self, galaxy_index):
+        return self.__galaxies[galaxy_index]
+
     def add_galaxy(self, galaxy):
         if self.__galaxy_exists(galaxy):
             return
@@ -27,8 +36,14 @@ class Universe(object):
         return self.__get_galaxy_index(galaxy) is not None
 
     def __get_galaxy_index(self, galaxy):
+        return self.__get_galaxy_index_named(galaxy.get_name())
+
+    def __galaxy_name_exists(self, galaxy_name):
+        return self.__get_galaxy_index_named(galaxy_name) is not None
+
+    def __get_galaxy_index_named(self, galaxy_name):
         for index, __galaxy in enumerate(self.__galaxies):
-            if (__galaxy.get_name() == galaxy.get_name()):
+            if (__galaxy.get_name() == galaxy_name):
                 return index
         return None
 
@@ -66,3 +81,12 @@ class Universe(object):
 
     def get_starting_system(self):
         return self.__starting_system
+
+    def load_file(self, game_file):
+        for galaxy_file in game_file['galaxies']:
+            galaxy = Galaxy(self.__data_handler)
+            galaxy.load_file(galaxy_file)
+        self.__starting_galaxy = Galaxy(self.__data_handler)
+        self.__starting_galaxy.load_file(game_file['startingGalaxy'])
+        self.__starting_sector = self.__starting_galaxy.get_sectors()[0]
+        self.__starting_system = self.__starting_sector.get_systems()[0]

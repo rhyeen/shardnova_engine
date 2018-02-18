@@ -1,10 +1,12 @@
 """ Container for Users
 """
+from scripts.facades.user import User
 
 
 class Users(object):
 
-    def __init__(self):
+    def __init__(self, data_handler):
+        self.__data_handler = data_handler
         self.__users = []
 
     def get_users(self):
@@ -40,3 +42,9 @@ class Users(object):
     def tick(self):
         for user in self.__users:
             user.tick()
+
+    def load_file(self, game_file, universe):
+        for user_file in game_file:
+            user = User(self.__data_handler, None)
+            user.load_file(user_file, universe)
+            self.add_user(user)

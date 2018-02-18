@@ -4,4 +4,6 @@ from scripts.classes.satellite.satellite import Satellite
 
 
 class Moon(Satellite):
-    pass
+
+    def _load_file_specifics(self, game_file, universe):
+        pass

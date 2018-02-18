@@ -4,4 +4,6 @@ from scripts.classes.satellite.satellite import Satellite
 
 
 class Sation(Satellite):
-    pass
+
+    def _load_file_specifics(self, game_file, universe):
+        pass

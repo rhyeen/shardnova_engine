@@ -4,11 +4,19 @@
 
 class Course(object):
 
-    def __init__(self, drone, destination_celestial_body):
+    def __init__(self,
+                 drone,
+                 destination_celestial_body,
+                 source_celestial_body=None,
+                 distance_to_destination=None):
         self.__drone = drone
         self.__destination = destination_celestial_body
-        self.__source = self.__get_source()
-        self.__distance_to_destination = self.__get_distance_to_destination()
+        if source_celestial_body is None:
+            source_celestial_body = self.__get_source()
+        self.__source = source_celestial_body
+        if distance_to_destination is None:
+            distance_to_destination = self.__get_distance_to_destination()
+        self.__distance_to_destination = distance_to_destination
         self.__finished = False
         self.__paused = False
 

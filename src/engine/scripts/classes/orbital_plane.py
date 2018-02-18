@@ -64,6 +64,14 @@ class OrbitalPlane(object):
             current_node = self.__next(current_node)
         return celestial_bodies
 
+    def get_celestial_body(self, name):
+        current_node = self.first_node
+        while current_node is not None:
+            if current_node.celestial_body.get_name() == name:
+                return current_node.celestial_body
+            current_node = self.__next(current_node)
+        raise ValueError('{0} does not exist in the orbital plane'.format(name))
+
     def push(self, celestial_body, distance_from_last=0):
         if self.first_node is None:
             self.__initialize(celestial_body)

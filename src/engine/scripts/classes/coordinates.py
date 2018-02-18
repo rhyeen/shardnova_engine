@@ -1,5 +1,6 @@
 """ Container for Coordinates
 """
+from scripts.classes.course import Course
 
 
 class Coordinates(object):
@@ -44,3 +45,19 @@ class Coordinates(object):
         if not self.__course.is_finished():
             return
         self.set_celestial_body(self.__course.get_destination())
+
+    def load_file(self, game_file, universe, drone=None):
+        self.galaxy = universe.get_galaxy(game_file['galaxy'])
+        self.sector = self.galaxy.get_sector(game_file['sector'])
+        self.system = self.sector.get_system(game_file['system'])
+        if 'celestialBody' in game_file and game_file['celestialBody'] is not None:
+            celestial_body = self.sector.get_celestial_body(game_file['celestialBody'])
+            self.set_celestial_body(celestial_body)
+            return
+        if drone is None:
+            raise ValueError('Coordinates is expecting a course, but there is no drone for the course.')
+        destination = self.sector.get_celestial_body(game_file['course']['destination'])
+        source = self.sector.get_celestial_body(game_file['course']['source'])
+        distance_to_destination = game_file['course']['distance_to_destination']
+        course = Course(drone, destination, source, distance_to_destination)
+        self.set_course(course)

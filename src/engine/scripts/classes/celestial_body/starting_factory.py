@@ -10,3 +10,6 @@ class StartingFactory(CelestialBody):
 
     def __str__(self):
         return '{0}'.format(self.get_name())
+
+    def _load_file_specifics(self, game_file):
+        pass

@@ -1,6 +1,7 @@
 """ Container for <I> HyperspaceGate
 """
 from scripts.classes.satellite.satellite import Satellite
+from scripts.classes.jump_point import JumpPoint
 
 
 class HyperspaceGate(Satellite):
@@ -37,3 +38,9 @@ class HyperspaceGate(Satellite):
 
     def __remove_jump_point(self, jump_point_index):
         del self.__jump_points[jump_point_index]
+
+    def _load_file_specifics(self, game_file):
+        for jump_point_file in game_file['jumpPoints']:
+            jump_point = JumpPoint(self.__data_handler)
+            jump_point.load_file(jump_point_file)
+            self.add_jump_point(jump_point)

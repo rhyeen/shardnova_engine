@@ -1,0 +1,163 @@
+{
+    "universe": {
+        "galaxies": [
+            {
+                "name": "galaxy1",
+                "sectors": [
+                    {
+                        "name": "sector1a",
+                        "systems": [
+                            {
+                                "name": "system1a1",
+                                "orbitalPlane": [
+                                    {
+                                        "celestialBody": {
+                                            "type": "star",
+                                            "name": "cb1a1a",
+                                            "satellites": []
+                                        }
+                                    },
+                                    {
+                                        "celestialBody": {
+                                            "type": "planet",
+                                            "name": "cb1a1b",
+                                            "satellites": [
+                                                {
+                                                    "type": "moon",
+                                                    "name": "moon1a1b1"
+                                                }
+                                            ]
+                                        },
+                                        "distranceToPrev": 4
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "startingGalaxy": {
+            "name": "galaxyS",
+            "sectors": [
+                {
+                    "name": "sectorS",
+                    "systems": [
+                        {
+                            "name": "systemS",
+                            "orbitalPlane": [
+                                {
+                                    "celestialBody": {
+                                        "type": "star",
+                                        "name": "starS"
+                                    }
+                                },
+                                {
+                                    "celestialBody": {
+                                        "type": "planet",
+                                        "name": "planetS"
+                                    },
+                                    "distranceToPrev": 5
+                                },
+                                {
+                                    "celestialBody": {
+                                        "type": "startingFactory",
+                                        "name": "startingFactoryS"
+                                    },
+                                    "distranceToPrev": 4
+                                },
+                                {
+                                    "celestialBody": {
+                                        "type": "beacon",
+                                        "name": "beaconS",
+                                        "satellites": [
+                                            {
+                                                "type": "hyperspaceGate",
+                                                "name": "hyperspaceGateS",
+                                                "jumpPoints": [
+                                                    {
+                                                        "coordinates": {
+                                                            "galaxy": "galaxy1",
+                                                            "sector": "sector1a",
+                                                            "system": "system1a1",
+                                                            "celestialBody": "cb1a1b"
+                                                        },
+                                                        "ticksPerJump": 40,
+                                                        "costPerJump": 1000
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "distranceToPrev": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "users": [
+        {
+            "outputHandler": "console",
+            "id": "user1",
+            "accountDetails": {
+
+            },
+            "character": {
+                "bank": {
+                    "primaryAccount": "ufa",
+                    "blackMarketAccount": {
+
+                    },
+                    "universalFederationAccount": {
+
+                    }
+                },
+                "factionReputs": {
+                    "factionMap": [
+                        {
+                            "faction": {
+                                "type": "universal",
+                                "name": "factionA"
+                            },
+                            "reputation": 0
+                        }
+                    ]
+                },
+                "droneWarehouse": {
+                    "activeDrones": [
+                        {
+                            "type": "probe",
+                            "id": "user1droneA",
+                            "inventory": {
+                                "type": "basic",
+                                "maxSlots": 4,
+                                "slots": [
+                                    {
+                                        "type": "fuelCompressionValve",
+                                        "durability": 8
+                                    }
+                                ]
+                            },
+                            "coordinates": {
+                                "galaxy": "galaxy1",
+                                "sector": "sector1a",
+                                "system": "system1a1",
+                                "celestialBody": null,
+                                "course": {
+                                    "source": "cb1a1a",
+                                    "destination": "cb1a1b"
+                                }
+                            },
+                            "fuel": 0
+                        }
+                    ],
+                    "inactiveDrones": [],
+                    "killedDrones": []
+                }
+            }
+        }
+    ]
+}

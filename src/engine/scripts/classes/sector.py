@@ -27,6 +27,15 @@ class Sector(object):
     def get_systems(self):
         return self.__systems
 
+    def get_system(self, name):
+        if not self.__system_name_exists(name):
+            raise ValueError('{0} is not found.'.format(name))
+        index = self.__get_system_index_named(name)
+        self.__get_system(self, index)
+
+    def __get_system(self, system_index):
+        return self.__systems[system_index]
+
     def add_system(self, system):
         if self.__system_exists(system):
             return
@@ -38,6 +47,15 @@ class Sector(object):
     def __get_system_index(self, system):
         for index, __system in enumerate(self.__systems):
             if (__system.get_name() == system.get_name()):
+                return index
+        return None
+
+    def __system_name_exists(self, system_name):
+        return self.__get_system_index_named(system_name) is not None
+
+    def __get_system_index_named(self, system_name):
+        for index, __system in enumerate(self.__systems):
+            if (__system.get_name() == system_name):
                 return index
         return None
 
@@ -65,3 +83,9 @@ class Sector(object):
         system = System(self.__data_handler)
         system.set_as_tutorial()
         self.add_system(system)
+
+    def load_file(self, game_file):
+        self.__name = game_file['name']
+        for system_file in game_file['systems']:
+            system = System(self.__data_handler)
+            system.load_file(system_file)

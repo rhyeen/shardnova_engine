@@ -27,6 +27,15 @@ class Galaxy(object):
     def get_sectors(self):
         return self.__sectors
 
+    def get_sector(self, name):
+        if not self.__sector_name_exists(name):
+            raise ValueError('{0} is not found.'.format(name))
+        index = self.__get_sector_index_named(name)
+        self.__get_sector(self, index)
+
+    def __get_sector(self, sector_index):
+        return self.__sectors[sector_index]
+
     def add_sector(self, sector):
         if self.__sector_exists(sector):
             return
@@ -38,6 +47,15 @@ class Galaxy(object):
     def __get_sector_index(self, sector):
         for index, __sector in enumerate(self.__sectors):
             if (__sector.get_name() == sector.get_name()):
+                return index
+        return None
+
+    def __sector_name_exists(self, sector_name):
+        return self.__get_sector_index_named(sector_name) is not None
+
+    def __get_sector_index_named(self, sector_name):
+        for index, __sector in enumerate(self.__sectors):
+            if (__sector.get_name() == sector_name):
                 return index
         return None
 
@@ -65,3 +83,9 @@ class Galaxy(object):
         sector = Sector(self.__data_handler)
         sector.set_as_tutorial()
         self.add_sector(sector)
+
+    def load_file(self, game_file):
+        self.__name = game_file['name']
+        for sector_file in game_file['sectors']:
+            sector = Sector(self.__data_handler)
+            sector.load_file(sector_file)

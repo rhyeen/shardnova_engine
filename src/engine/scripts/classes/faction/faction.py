@@ -1,6 +1,6 @@
 """ Container for <I> Faction
 """
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Faction(ABC):
@@ -13,3 +13,14 @@ class Faction(ABC):
 
     def get_name(self):
         return self.__name
+
+    def load_file(self, game_file):
+        self._load_file_generics(game_file)
+        self._load_file_specifics(game_file)
+
+    def _load_file_generics(self, game_file):
+        self.__name = game_file['name']
+
+    @abstractmethod
+    def _load_file_specifics(self, game_file):
+        raise NotImplementedError

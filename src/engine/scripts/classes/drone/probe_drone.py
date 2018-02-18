@@ -15,3 +15,6 @@ class ProbeDrone(Drone):
 
     def get_default_distance_per_tick(self):
         return 2
+
+    def _load_file_specifics(self, game_file):
+        pass

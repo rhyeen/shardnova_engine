@@ -2,6 +2,7 @@
 """
 from abc import ABC, abstractmethod
 from scripts.classes.coordinates import Coordinates
+from scripts.classes.inventory.basic_inventory import BasicInventory
 
 
 class Drone(ABC):
@@ -70,3 +71,25 @@ class Drone(ABC):
     @abstractmethod
     def get_default_fuel_per_distance(self):
         return 1
+
+    def load_file(self, game_file, universe):
+        self._load_file_generics(game_file, universe)
+        self._load_file_specifics(game_file)
+
+    def _load_file_generics(self, game_file, universe):
+        self.__id = game_file['id']
+        self.fuel = game_file['fuel']
+        self.load_file_inventory(game_file['inventory'])
+        self.coordinates.load_file(game_file['coordinates'], universe, self)
+
+    def load_file_inventory(self, game_file):
+        inventory_type = game_file['type']
+        if inventory_type == 'basic':
+            self.__inventory = BasicInventory()
+        else:
+            raise ValueError('Inventory of type "{0}" unsupported'.format(inventory_type))
+        self.__inventory.load_file(game_file)
+
+    @abstractmethod
+    def _load_file_specifics(self, game_file):
+        raise NotImplementedError

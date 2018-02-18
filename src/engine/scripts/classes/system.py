@@ -7,6 +7,7 @@ from scripts.classes.celestial_body.starting_factory import StartingFactory
 from scripts.classes.satellite.hyperspace_gate import HyperspaceGate
 from scripts.classes.celestial_body.beacon import Beacon
 from scripts.classes.celestial_body.planet import Planet
+from scripts.classes.celestial_body.asteroid_belt import AsteroidBelt
 
 
 class System(object):
@@ -34,6 +35,9 @@ class System(object):
     def get_celestial_bodies(self):
         return self.__orbital_plane.get_celestial_bodies()
 
+    def get_celestial_body(self, name):
+        return self.__orbital_plane.get_celestial_body(name)
+
     def get_distances(self, celestial_body):
         return self.__orbital_plane.get_distances(celestial_body)
 
@@ -60,3 +64,31 @@ class System(object):
 
     def get_tutorial_starting_point(self):
         return self.__starting_factory
+
+    def load_file(self, game_file):
+        self.__name = game_file['name']
+        self.__orbital_plane = OrbitalPlane()
+        for orbital_plane_file in game_file['orbitalPlane']:
+            celestial_body = self.__load_file_celestial_body(orbital_plane_file['celestialBody'])
+            if 'distanceToPrev' in orbital_plane_file:
+                distance_to_previous = orbital_plane_file['distanceToPrev']
+            else:
+                distance_to_previous = None
+            self.__orbital_plane.push(celestial_body, distance_to_previous)
+
+    def __load_file_celestial_body(self, game_file):
+        celestial_body_type = game_file['type']
+        if celestial_body_type == 'star':
+            celestial_body = Star(self.__data_handler)
+        elif celestial_body_type == 'planet':
+            celestial_body = Planet(self.__data_handler)
+        elif celestial_body_type == 'beacon':
+            celestial_body = Beacon(self.__data_handler)
+        elif celestial_body_type == 'asteroidBelt':
+            celestial_body = AsteroidBelt(self.__data_handler)
+        elif celestial_body_type == 'startingFactory':
+            celestial_body = StartingFactory(self.__data_handler)
+        else:
+            raise ValueError('Celestial body of type "{0}" unsupported'.format(celestial_body_type))
+        celestial_body.load_file(game_file)
+        return celestial_body

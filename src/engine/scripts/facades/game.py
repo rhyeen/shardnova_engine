@@ -16,11 +16,13 @@ class Game(object):
     def initialize_game(self):
         self.universe = Universe(self.__data_handler)
         self.universe.generate()
-        self.users = Users()
+        self.users = Users(self.__data_handler)
 
-    def load_game(self, universe, users):
-        self.universe = universe
-        self.users = users
+    def load_game_file(self, game_file):
+        self.universe = Universe(self.__data_handler)
+        self.universe.load_file(game_file['universe'])
+        self.users = Users()
+        self.users.load_file(game_file['users'], self.universe)
 
     def new_user(self, user):
         is_new_user = self.users.add_user(user)

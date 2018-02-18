@@ -1,6 +1,7 @@
 """ Container for <I> Inventory
 """
 from abc import ABC, abstractmethod
+from scripts.classes.item.item_identifier import ItemIdentifier
 
 
 class Inventory(ABC):
@@ -59,3 +60,17 @@ class Inventory(ABC):
 
     def get_all_items(self):
         return filter(lambda x: x is not None, self._slots)
+
+    def load_file(self, game_file):
+        self._load_file_generics(game_file)
+        self._load_file_specifics(game_file)
+
+    def _load_file_generics(self, game_file):
+        self.__max_slots = game_file['maxSlots']
+        for slot in game_file['slots']:
+            item = ItemIdentifier.get_item_from_file(slot)
+            self.add_item(item)
+
+    @abstractmethod
+    def _load_file_specifics(self, game_file):
+        raise NotImplementedError

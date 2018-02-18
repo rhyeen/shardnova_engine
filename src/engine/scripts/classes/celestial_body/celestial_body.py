@@ -1,6 +1,9 @@
 """ Container for <I> CelestialBody
 """
 from abc import ABC, abstractmethod
+from scripts.classes.satellite.hyperspace_gate import HyperspaceGate
+from scripts.classes.satellite.moon import Moon
+from scripts.classes.satellite.station import Station
 
 
 class CelestialBody(ABC):
@@ -36,7 +39,7 @@ class CelestialBody(ABC):
 
     def __get_satellite_index(self, satellite):
         for index, __satellite in enumerate(self.__satellites):
-            if (__satellite.get_id() == satellite.get_id()):
+            if (__satellite.get_name() == satellite.get_name()):
                 return index
         return None
 
@@ -51,3 +54,30 @@ class CelestialBody(ABC):
 
     def __remove_satellite(self, satellite_index):
         del self.__satellites[satellite_index]
+
+    def load_file(self, game_file):
+        self._load_file_generics(game_file)
+        self._load_file_specifics(game_file)
+
+    def _load_file_generics(self, game_file):
+        self.__name = game_file['name']
+        for satellite_file in game_file['satellites']:
+            satellite = self.__load_file_satellite(satellite_file)
+            self.add_satellite(satellite)
+
+    def __load_file_satellite(self, game_file):
+        satellite_type = game_file['type']
+        if satellite_type == 'hyperspaceGate':
+            satellite = HyperspaceGate(self.__data_handler)
+        elif satellite_type == 'mooon':
+            satellite = Moon(self.__data_handler)
+        elif satellite_type == 'station':
+            satellite = Station(self.__data_handler)
+        else:
+            raise ValueError('Satellite of type "{0}" unsupported'.format(satellite_type))
+        satellite.load_file(game_file)
+        return satellite
+
+    @abstractmethod
+    def _load_file_specifics(self, game_file):
+        raise NotImplementedError

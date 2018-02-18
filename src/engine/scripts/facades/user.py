@@ -2,6 +2,7 @@
 """
 from scripts.facades.account_details import AccountDetails
 from scripts.classes.character.player_character import PlayerCharacter
+from scripts.interfaces.output_handler.console_output_handler import ConsoleOutputHandler
 
 
 class User(object):
@@ -10,7 +11,7 @@ class User(object):
         self.__data_handler = data_handler
         self.output_handler = output_handler
         self.__account_details = AccountDetails()
-        self.character = PlayerCharacter()
+        self.character = PlayerCharacter(self.__data_handler)
         if user_id is None:
             user_id = self.__get_unique_id()
         self.__id = user_id
@@ -56,3 +57,16 @@ class User(object):
 
     def tick(self):
         self.character.tick()
+
+    def load_file(self, game_file, universe):
+        self.__load_output_handler(game_file)
+        self.__id = game_file['id']
+        self.__account_details.load_file(game_file['accountDetails'])
+        self.character.load_file(game_file['character'], universe)
+
+    def __load_output_hanlder(self, game_file):
+        output_handler_type = game_file['outputHandler']
+        if output_handler_type == 'console':
+            self.output_handler = ConsoleOutputHandler()
+        else:
+            raise ValueError('Output handler of type "{0}" unsupported'.format(output_handler_type))
