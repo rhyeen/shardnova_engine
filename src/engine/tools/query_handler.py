@@ -4,6 +4,7 @@ import os
 from time import sleep
 import pymysql.cursors
 
+
 class QueryHandler(object):
     """ Handles the oddities of mysqldb such as multistatement transactions, auto commits, and
         retry logic when connection goes down.

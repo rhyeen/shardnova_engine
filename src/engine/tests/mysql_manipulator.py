@@ -1,27 +1,22 @@
 """ Container for MysqlManipulator
 """
 import json
-from tools.configurer import Configurer
+from tools.query_handler import QueryHandler
 
 
 class MysqlManipulator(object):
-    """ Used to manipulate the database in more manual ways while abstracting away the MySQL calls.
-    """
-    mysql = None
-
-    """ @WARNING: Setting _IS_TEST to anything but True could result in a complete wipe of your
-        real tables.
+    """ @WARNING: Setting _IS_TEST to anything but True could
+        result in a complete wipe of your real tables.
         Set to false at your own risk:
         Doing so would cause the database calls to be made on the real tables instead of the test
         tables.
     """
     _IS_TEST = True
 
-    def __init__(self, config):
-        """ Sets up class with the given config file
-        """
-        Configurer.check_config_object(config)
-        self.mysql = Configurer.connect_mysql(config)
+    def __init__(self, environment):
+        self.query_handler = QueryHandler(environment)
+        self.mysql = self.query_handler.mysql
+
 
     def clear_table(self, table_name):
         """ Truncates the given table_name

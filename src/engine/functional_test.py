@@ -1,7 +1,5 @@
 """ Container for starting functional tests
 """
-import os
-import json
 import argparse
 
 from tests.functional_tester import FunctionalTester
@@ -9,7 +7,7 @@ from tests.mysql_manipulator import MysqlManipulator
 from tests.functional_test_populator import FunctionalTestPopulator
 from tests.blank_log_manager import BlankLogManager
 
-from scripts.bootstrapper import Bootstrapper
+from scripts.sync_bootstrapper import SyncBootstrapper
 
 
 """ Possible considerations when testings:
@@ -58,8 +56,9 @@ class MyFunctionalTester(FunctionalTester):
 
     def __init__(self, log_manager, environment, print_to_console=True):
         super(MyFunctionalTester, self).__init__(log_manager, print_to_console)
-        self._mysql_manipulator = MysqlManipulator()
+        self._mysql_manipulator = MysqlManipulator(environment)
         self.environment = environment
+        self.bootstrapper = None
 
     def _setup(self, tables):
         for table in tables:
@@ -70,7 +69,7 @@ class MyFunctionalTester(FunctionalTester):
                 try:
                     self._mysql_manipulator.drop_table(table_name)
                 except:
-                    pass # no table to drop
+                    pass  # no table to drop
         for table in tables:
             if 'entries' not in table:
                 continue
@@ -78,52 +77,53 @@ class MyFunctionalTester(FunctionalTester):
             table_name = table['table_name']
             self._mysql_manipulator.add_dict_entries_to_table(table_name, entries)
 
-    def _run_automation(self, test_config):
-        my_starting_class = Bootstrapper(self.log_manager,
-                                         self.environment,
-                                         test_config)
-        my_starting_class.execute()
+    def get_bootstrapper(self, test_config):
+        return SyncBootstrapper(self.log_manager,
+                                self.environment,
+                                test_config)
 
-    def test_something(self):
-        self.run_test(self._test_something)
+    def test_in_system_courses(self):
+        self.run_test(self._test_in_system_courses)
 
-    def _test_something(self, args=None):
-        # prepare to populate database tables
-        populate_tables = []
-        entries = FunctionalTestPopulator.get_test_table_entries()
-        table = {
-            'table_name': 'test_table',
-            'entries': entries
-        }
-        populate_tables.append(table)
-
+    def _test_in_system_courses(self, args=None):
         test_config = {
-            'something_externally_controlled_data': [
-                'like_datetimes',
-                'or_api_calls'
-            ]
+            'preserve_output': True
         }
+        self.bootstrapper = self.get_bootstrapper(test_config)
+        output_records = self.__get_output_records()
+        assert(len(output_records) == 1)
+        self.__get_command('set_course')(0)
+        assert(len(output_records) == 2)
+        self.__tick()
+        self.__tick()
+        self.__get_command('check_course')()
+        assert (len(output_records) == 3)
+        self.__get_command('get_map')()
+        assert (len(output_records) == 4)
+        self.__get_command('set_course')(3)
+        assert (len(output_records) == 5)
+        self.__tick()
+        self.__tick()
+        self.__get_command('check_course')()
+        assert (len(output_records) == 6)
 
-        # Start your script
-        self._run_automation(test_config)
+    def __tick(self):
+        self.bootstrapper.time_keeper.tick()
 
-        # Script has finished, now verify outgoing data
-        # Such as tables that are affected
-        results = self._mysql_manipulator.get_table_entries('test_table')
-        assert len(results) == 2
-        single_result = results[1]
-        assert single_result['some_column'] == 'test'
+    def __get_output_records(self):
+        return self.bootstrapper.user.output_handler.output_records
+
+    def __get_command(self, command_call):
+        return self.bootstrapper.user_commands.get_command_function(command_call)
 
 
 def run_tests(functional_test):
     """ All test cases should be ran in here for organization.
     """
-    functional_test.test_something()
+    functional_test.test_in_system_courses()
 
 
-def get_config():
-    """ Retrieves the config from the arguments passed in.  Default is config/config_test.json
-    """
+def get_args():
     description = ('Functional testing.')
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-e',
@@ -139,11 +139,12 @@ def main():
     """ Begins each functional test
     """
     # @NOTE: we use a shell log_manager here since we want don't want to log testing errors.
-    environment = get_config()
+    environment = get_args()
     log_manager = BlankLogManager()
     functional_test = MyFunctionalTester(log_manager, environment)
     run_tests(functional_test)
     functional_test.finish()
+
 
 """ Initial setup
 """

@@ -1,12 +1,11 @@
 """ Container for HttpRequester
 """
 import json
-from base64 import urlsafe_b64encode
-from hashlib import sha256
 from time import time, sleep
 import requests
 import jwt  # pip install pyjwt
 from urllib.request import urlopen, Request
+
 
 class HttpRequester(object):
     """ Simple wrapper over requests to make all simple HTTP requests condensed down into one

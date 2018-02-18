@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 import calendar
 
+
 class DateFormatter(object):
     """ For simple date manipulation.  Wrapper around typical datetime methods for functions
         written 90% if the time in code anyway.

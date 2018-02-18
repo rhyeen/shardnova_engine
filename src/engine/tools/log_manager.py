@@ -1,6 +1,5 @@
 """ Container for Log Manager
 """
-import os
 import datetime
 import json
 import random
@@ -9,6 +8,7 @@ import time
 import traceback
 
 from tools.query_handler import QueryHandler
+
 
 class LogManager(object):
     """ See README.md

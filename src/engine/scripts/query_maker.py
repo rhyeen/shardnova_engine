@@ -1,6 +1,7 @@
 """ Container for QueryMaker
 """
 
+
 class QueryMaker(object):
     """ Static class that creates the MySQL queries for the module.
         Each method returns the table name, and the query string for that given method.

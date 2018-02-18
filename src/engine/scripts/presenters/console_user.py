@@ -1,12 +1,16 @@
 """ Container for ConsoleUser
 """
 from scripts.interfaces.output_handler.console_output_handler import ConsoleOutputHandler
+from scripts.kill_switch import KillSwitch
 
 
 class ConsoleUser(object):
 
-    def __init__(self, interactor, user=None):
+    def __init__(self, interactor, user=None, kill_switch=None):
         self.__interactor = interactor
+        if kill_switch is None:
+            kill_switch = KillSwitch()
+        self.__kill_switch = kill_switch
         if user is not None:
             user.output_handler = ConsoleOutputHandler()
             # Still need to ensure we bind the user to the interactor
@@ -16,9 +20,9 @@ class ConsoleUser(object):
         self.__user = user
         self.__drone = user.character.get_primary_drone()
 
-    def start_console(self, kill_switch):
+    def start_console(self):
         text = None
-        while text != 'STOP' and not kill_switch.should_kill():
+        while text != 'STOP' and not self.__kill_switch.should_kill():
             text = input('>>')
             command = self.__get_command(text)
             self.__handle_input_command(command)
