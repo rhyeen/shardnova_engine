@@ -20,8 +20,9 @@ COPY ./ /home/default
 ## Set env vars
 # Not Secret
 ENV MYSQL_HOST 'shardrealms.com'
-ENV MYSQL_USER 'dev_shardrealms'
-ENV MYSQL_DATABASE 'dev_shardrealms'
+ENV MYSQL_USER 'sr_creation_dev'
+ENV MYSQL_DATABASE 'sr_creation_dev'
+ENV MYSQL_PORT '3306'
 
 # Secret
 ENV MYSQL_PASSWORD 'not_password'
