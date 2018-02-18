@@ -32,13 +32,13 @@ class System(object):
         return self.__name
 
     def get_celestial_bodies(self):
-        self.__orbital_plane.get_celestial_bodies()
+        return self.__orbital_plane.get_celestial_bodies()
 
     def get_distances(self, celestial_body):
-        self.__orbital_plane.get_distances(celestial_body)
+        return self.__orbital_plane.get_distances(celestial_body)
 
     def get_distance_between_celestial_bodies(self, body1, body2):
-        self.__orbital_plane.get_distance_between_celestial_bodies(body1, body2)
+        return self.__orbital_plane.get_distance_between_celestial_bodies(body1, body2)
 
     def generate(self):
         total = random.randint(1, self.max_celestial_bodies)
@@ -50,13 +50,13 @@ class System(object):
     def set_as_tutorial(self):
         self.__orbital_plane = OrbitalPlane()
         self.__orbital_plane.push(Star(self.__data_handler))
-        self.__orbital_plane.push(Planet(self.__data_handler))
+        self.__orbital_plane.push(Planet(self.__data_handler), 8)
         self.__starting_factory = StartingFactory(self.__data_handler)
-        self.__orbital_plane.push(self.__starting_factory)
+        self.__orbital_plane.push(self.__starting_factory, 2)
         beacon = Beacon(self.__data_handler)
         hyperspace_gate = HyperspaceGate(self.__data_handler)
         beacon.add_satellite(hyperspace_gate)
-        self.__orbital_plane.push(beacon)
+        self.__orbital_plane.push(beacon, 4)
 
     def get_tutorial_starting_point(self):
         return self.__starting_factory

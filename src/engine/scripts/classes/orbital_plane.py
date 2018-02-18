@@ -10,6 +10,9 @@ class Node(object):
         self.prev_node = None
         self.prev_edge = None
 
+    def __str__(self):
+        return str(self.celestial_body)
+
 
 class OrbitalPlane(object):
     def __init__(self):
@@ -23,13 +26,14 @@ class OrbitalPlane(object):
         distances = {}
         current_node = node
         while True:
-            distances[current_node.celestial_body.get_id()] = next_distance
+            distances[current_node.celestial_body.get_name()] = next_distance
             current_node = self.__next(current_node)
             if current_node is None:
                 break
             next_distance += current_node.prev_edge
+        current_node = node
         while True:
-            distances[current_node.celestial_body.get_id()] = prev_distance
+            distances[current_node.celestial_body.get_name()] = prev_distance
             current_node = self.__prev(current_node)
             if current_node is None:
                 break
@@ -41,7 +45,7 @@ class OrbitalPlane(object):
             return None
         current_node = self.first_node
         while current_node is not None:
-            if current_node.celestial_body.get_id() == celestial_body.get_id():
+            if current_node.celestial_body.get_name() == celestial_body.get_name():
                 return current_node
             current_node = self.__next(current_node)
         raise ValueError('{0} does not exist in the orbital plane'.format(celestial_body))
@@ -56,7 +60,7 @@ class OrbitalPlane(object):
         celestial_bodies = []
         current_node = self.first_node
         while current_node is not None:
-            celestial_bodies.append(current_node.celestial_bodies)
+            celestial_bodies.append(current_node.celestial_body)
             current_node = self.__next(current_node)
         return celestial_bodies
 
@@ -104,7 +108,7 @@ class OrbitalPlane(object):
 
     def get_distance_between_celestial_bodies(self, body1, body2):
         distances = self.get_distances(body1)
-        if body2.get_id() not in distances:
+        if body2.get_name() not in distances:
             raise ValueError('second celestial body, {0} not within orbital plane'
                              .format(body2))
-        return distances[body2.get_id()]
+        return distances[body2.get_name()]

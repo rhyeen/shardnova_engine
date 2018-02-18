@@ -16,22 +16,22 @@ class ConsoleUser(object):
         self.__user = user
         self.__drone = user.character.get_primary_drone()
 
-    def start_console(self):
+    def start_console(self, kill_switch):
         text = None
-        while text != 'STOP':
-            text = input('Next Command:')
+        while text != 'STOP' and not kill_switch.should_kill():
+            text = input('>>')
             command = self.__get_command(text)
             self.__handle_input_command(command)
 
     def __get_command(self, text):
         text = self.__conform_text(text)
-        if (text[0] == 'get map'):
+        if text[0] == 'get map':
             return ['GET', 'MAP']
-        if (text[0] == 'set course'):
+        if text[0] == 'set course':
             command = ['SET', 'COURSE']
-            command.push(int(text[1]))
+            command.append(int(text[1]))
             return command
-        if (text[0] == 'check course'):
+        if text[0] == 'check course':
             return ['GET', 'COURSE']
         return ['INVALID']
 

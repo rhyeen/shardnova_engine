@@ -27,6 +27,7 @@ class Game(object):
         if not is_new_user:
             return False
         drone = ProbeDrone(self.__data_handler)
+        drone.fuel = 20
         user.character.drone_warehouse.add_drone(drone)
         user.character.drone_warehouse.activate_drone(drone)
         drone.coordinates = Coordinates()

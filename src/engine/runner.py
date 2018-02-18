@@ -1,9 +1,6 @@
 """ Container for starting runner
 """
 import argparse
-
-from scripts.tick_bootstrapper import TickBootstrapper
-from scripts.user_bootstrapper import UserBootstrapper
 from scripts.thread_bootstrapper import ThreadBootstrapper
 from tools.log_manager import LogManager
 
@@ -15,14 +12,19 @@ def get_args():
                         '--environment',
                         default='local',
                         help='environment in which the script is running: local, stage, prod, test')
-    parser.add_argument('-i',
-                        '--interface',
-                        default='thread',
-                        help='type of console to run: thread, time, user')
+    parser.add_argument('-s',
+                        '--script',
+                        default=None,
+                        help='user script function name. Default will set to console user.')
+    parser.add_argument('-t',
+                        '--tick',
+                        default=None,
+                        help='How many milliseconds is the tick. Default is game default (60000).  May also set to "console" to control ticks via input.')
     parsed = parser.parse_args()
     environment = parsed.environment
-    interface = parsed.interface
-    return environment, interface
+    script = parsed.script
+    tick = parsed.tick
+    return environment, script, tick
 
 
 def main():
@@ -30,18 +32,20 @@ def main():
     """
     log_manager = None
     try:
-        environment, interface = get_args()
+        environment, script, tick = get_args()
         log_manager = LogManager(script_id='Engine',
                                  project_id='Shardnova',
                                  environment=environment)
-        if interface == 'thread':
-            bootstrapper = ThreadBootstrapper(log_manager, environment)
-        elif interface == 'time':
-            bootstrapper = TickBootstrapper(log_manager, environment)
-        elif interface == 'user':
-            bootstrapper = UserBootstrapper(log_manager, environment)
-        else:
-            raise ValueError('Invalid interface: {0}'.format(interface))
+        bootstrapper = ThreadBootstrapper(log_manager, environment)
+        # @DEBUG:
+        script = 'basic_commands'
+        tick = 'console'
+        if script is not None:
+            bootstrapper.set_scripted_controller(script)
+        if tick == 'console':
+            bootstrapper.set_console_tick()
+        elif tick is not None:
+            bootstrapper.set_tick_duration(tick / 1000)
         bootstrapper.execute()
         log_manager.record_cached_logs()
     except KeyboardInterrupt:

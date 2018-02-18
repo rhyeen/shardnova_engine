@@ -6,7 +6,7 @@ from scripts.presenters.console_user import ConsoleUser
 
 class ThreadConsoleUser(object):
 
-    def __init__(self, interactor, kill_switch, user=None):
+    def __init__(self, interactor, kill_switch):
         self.__kill_switch = kill_switch
         self.__console_user = ConsoleUser(interactor)
         self.__thread_worker = ThreadWorker(self.__console_user, self.__kill_switch)

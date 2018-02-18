@@ -18,15 +18,18 @@ class User(object):
     def __str__(self):
         return 'User: {0}'.format(self.get_id())
 
+    def get_id(self):
+        return self.__id
+
     def __get_unique_id(self):
         return self.__data_handler.get_unique_id('user')
 
     def shares_identifiers(self, user):
-        if (self.get_id() == user.get_id()):
+        if self.get_id() == user.get_id():
             return True
-        if (self.__has_any_phone(user.get_phone_book().get_all_phones())):
+        if self.__has_any_phone(user.get_phone_book().get_all_phones()):
             return True
-        if (self.__has_patreon_id(user.get_account_details().get_patreon_id())):
+        if self.__has_patreon_id(user.get_account_details().get_patreon_id()):
             return True
         return False
 

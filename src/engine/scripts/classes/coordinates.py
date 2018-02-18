@@ -11,6 +11,12 @@ class Coordinates(object):
         self.__celestial_body = None
         self.__course = None
 
+    def __str__(self):
+        if self.at_celestial_body():
+            return 'At: {0}'.format(self.__celestial_body)
+        else:
+            return 'Course: {0}'.format(self.__course)
+
     def at_celestial_body(self):
         return self.__celestial_body is not None
 

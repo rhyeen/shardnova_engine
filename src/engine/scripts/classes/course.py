@@ -12,8 +12,11 @@ class Course(object):
         self.__finished = False
         self.__paused = False
 
+    def __str__(self):
+        return '{0} --> {1} :: {2} pu'.format(self.__source, self.__destination, self.__distance_to_destination)
+
     def __get_source(self):
-        coordinates = self.__drone.get_coordinates()
+        coordinates = self.__drone.coordinates
         if coordinates.at_celestial_body():
             return coordinates.get_celestial_body()
         else:
@@ -21,7 +24,7 @@ class Course(object):
             return course.get_source()
 
     def __get_distance_to_destination(self):
-        coordinates = self.__drone.get_coordinates()
+        coordinates = self.__drone.coordinates
         distance = self.__get_distance_to_celestial_body(self.__source, self.__destination)
         if coordinates.at_celestial_body():
             return distance
@@ -47,8 +50,8 @@ class Course(object):
         return distance_to_course_destination > distance_to_course_source
 
     def __get_distance_to_celestial_body(self, source, destination):
-        coordinates = self.__drone.get_coordinates()
-        system = coordinates.get_system()
+        coordinates = self.__drone.coordinates
+        system = coordinates.system
         return system.get_distance_between_celestial_bodies(source, destination)
 
     def get_source(self):
