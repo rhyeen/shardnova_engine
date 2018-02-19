@@ -14,23 +14,21 @@ class Item(ABC):
         self.durability = durability
         self.cost_per_repair_point = self._get_cost_per_repair_point()
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def _get_max_durability():
         raise NotImplementedError
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def _get_cost_per_repair_point():
         raise NotImplementedError
 
-    @abstractmethod
     def modifies_distance_per_tick(self):
-        return self._alter_by_durability(0.8)
+        return self._alter_by_durability(0)
 
-    @abstractmethod
     def modifies_fuel_per_distance(self):
-        return 0
+        return self._alter_by_durability(0)
 
     def load_file(self, game_file):
         self._load_file_generics(game_file)

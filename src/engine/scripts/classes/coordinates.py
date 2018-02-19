@@ -56,8 +56,8 @@ class Coordinates(object):
             return
         if drone is None:
             raise ValueError('Coordinates is expecting a course, but there is no drone for the course.')
-        destination = self.sector.get_celestial_body(game_file['course']['destination'])
-        source = self.sector.get_celestial_body(game_file['course']['source'])
-        distance_to_destination = game_file['course']['distance_to_destination']
+        destination = self.system.get_celestial_body(game_file['course']['destination'])
+        source = self.system.get_celestial_body(game_file['course']['source'])
+        distance_to_destination = game_file['course']['distanceToDestination']
         course = Course(drone, destination, source, distance_to_destination)
         self.set_course(course)

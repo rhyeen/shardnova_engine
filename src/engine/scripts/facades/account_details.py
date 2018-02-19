@@ -21,6 +21,9 @@ class AccountDetails(object):
     def get_patreon_details(self):
         return self.__patreon_details
 
+    def get_patreon_id(self):
+        return self.__patreon_details.get_patreon_id()
+
     def set_patreon_details(self, patreon_details):
         self.__patreon_details = patreon_details
 
@@ -35,3 +38,8 @@ class AccountDetails(object):
 
     def get_primary_phone_number(self):
         return self.__phone_book.get_primary_phone_number()
+
+    def load_file(self, game_file):
+        self.__phone_book.load_file(game_file['phoneBook'])
+        self.__patreon_details.load_file(game_file['patreonDetails'])
+        self.__sms_credits.load_file(game_file['smsCredits'])

@@ -1,6 +1,8 @@
 """ Container for starting functional tests
 """
 import argparse
+import json
+import os
 
 from tests.functional_tester import FunctionalTester
 from tests.mysql_manipulator import MysqlManipulator
@@ -54,10 +56,11 @@ class MyFunctionalTester(FunctionalTester):
                 weaknesses in your coverage
     """
 
-    def __init__(self, log_manager, environment, print_to_console=True):
+    def __init__(self, log_manager, environment, game_file, print_to_console=True):
         super(MyFunctionalTester, self).__init__(log_manager, print_to_console)
         self._mysql_manipulator = MysqlManipulator(environment)
         self.environment = environment
+        self.game_file = game_file
         self.bootstrapper = None
 
     def _setup(self, tables):
@@ -77,9 +80,10 @@ class MyFunctionalTester(FunctionalTester):
             table_name = table['table_name']
             self._mysql_manipulator.add_dict_entries_to_table(table_name, entries)
 
-    def get_bootstrapper(self, test_config):
+    def get_bootstrapper(self, game_file, test_config):
         return SyncBootstrapper(self.log_manager,
                                 self.environment,
+                                game_file,
                                 test_config)
 
     def test_in_system_courses(self):
@@ -89,7 +93,7 @@ class MyFunctionalTester(FunctionalTester):
         test_config = {
             'preserve_output': True
         }
-        self.bootstrapper = self.get_bootstrapper(test_config)
+        self.bootstrapper = self.get_bootstrapper(self.game_file, test_config)
         output_records = self.__get_output_records()
         assert(len(output_records) == 1)
         self.__get_command('set_course')(0)
@@ -135,13 +139,23 @@ def get_args():
     return environment
 
 
+def get_game_file(environment):
+    environment_mapping = {
+        'test': '../config/test/game.json'
+    }
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    game_file = json.load(open(environment_mapping[environment]))
+    return game_file
+
+
 def main():
     """ Begins each functional test
     """
     # @NOTE: we use a shell log_manager here since we want don't want to log testing errors.
     environment = get_args()
+    game_file = get_game_file(environment)
     log_manager = BlankLogManager()
-    functional_test = MyFunctionalTester(log_manager, environment)
+    functional_test = MyFunctionalTester(log_manager, environment, game_file)
     run_tests(functional_test)
     functional_test.finish()
 

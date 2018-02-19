@@ -21,7 +21,7 @@ class DroneWarehouse(object):
         return self.__killed_drones
 
     def add_drone(self, drone):
-        self._add_drone(self.__inactive_drones, drone)
+        self.__add_drone(self.__inactive_drones, drone)
 
     def __drone_exists(self, group, drone):
         return self.__get_drone_index(group, drone) is not None
@@ -29,7 +29,7 @@ class DroneWarehouse(object):
     @staticmethod
     def __get_drone_index(group, drone):
         for index, __drone in enumerate(group):
-            if (__drone.get_id() == drone.get_id()):
+            if __drone.get_id() == drone.get_id():
                 return index
         return None
 

@@ -23,7 +23,7 @@ class HyperspaceGate(Satellite):
 
     def __get_jump_point_index(self, jump_point):
         for index, __jump_point in enumerate(self.__jump_points):
-            if (__jump_point.get_name() == jump_point.get_name()):
+            if __jump_point.get_name() == jump_point.get_name():
                 return index
         return None
 
@@ -34,13 +34,13 @@ class HyperspaceGate(Satellite):
         if not self.__jump_point_exists(jump_point):
             raise ValueError('{0} is not found.'.format(jump_point))
         index = self.__get_jump_point_index(jump_point)
-        self.__remove_jump_point(self, index)
+        self.__remove_jump_point(index)
 
     def __remove_jump_point(self, jump_point_index):
         del self.__jump_points[jump_point_index]
 
     def _load_file_specifics(self, game_file):
         for jump_point_file in game_file['jumpPoints']:
-            jump_point = JumpPoint(self.__data_handler)
+            jump_point = JumpPoint(self._data_handler)
             jump_point.load_file(jump_point_file)
             self.add_jump_point(jump_point)

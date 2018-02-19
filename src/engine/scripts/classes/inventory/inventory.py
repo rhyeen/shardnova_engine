@@ -28,7 +28,8 @@ class Inventory(ABC):
     def add_item(self, item, slot=None):
         if slot is None:
             self.__fill_next_empty_slot(item)
-        self.__fill_slot(item, slot)
+        else:
+            self.__fill_slot(item, slot)
 
     def __fill_next_empty_slot(self, item):
         slot = self.__get_empty_slot()
@@ -54,9 +55,9 @@ class Inventory(ABC):
         return slot < 0 or slot > self.__max_slots - 1
 
     def empty_slot(self, slot):
-        if self.__slot_out_of_bounds():
+        if self.__slot_out_of_bounds(slot):
             return
-        self.__max_slots[slot] = None
+        self._slots[slot] = None
 
     def get_all_items(self):
         return filter(lambda x: x is not None, self._slots)

@@ -28,7 +28,7 @@ class Bank(object):
         self.__universal_federation_account = bank_account
 
     def get_primary_account(self):
-        if (self.__primary_account == 'ufa'):
+        if self.__primary_account == 'ufa':
             return self.__universal_federation_account
         return self.__black_market_account
 

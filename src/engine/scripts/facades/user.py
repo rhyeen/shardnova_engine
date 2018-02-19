@@ -64,7 +64,7 @@ class User(object):
         self.__account_details.load_file(game_file['accountDetails'])
         self.character.load_file(game_file['character'], universe)
 
-    def __load_output_hanlder(self, game_file):
+    def __load_output_handler(self, game_file):
         output_handler_type = game_file['outputHandler']
         if output_handler_type == 'console':
             self.output_handler = ConsoleOutputHandler()

@@ -15,6 +15,9 @@ class Interactor(object):
     def initialize_game(self):
         self.__game.initialize_game()
 
+    def load_game_file(self, game_file):
+        self.__game.load_game_file(game_file)
+
     def create_phone_user(self, phone, output_handler):
         user = User(self.__data_handler, output_handler)
         user.set_primary_phone(phone)

@@ -1,6 +1,6 @@
 """ Container for FactionReputs
 """
-from scripts.classes.universal_faction import UniversalFaction
+from scripts.classes.faction.universal_faction import UniversalFaction
 
 
 class FactionReputs(object):
@@ -14,6 +14,7 @@ class FactionReputs(object):
             raise ValueError('{0} already has a reput'.format(faction))
         self.__faction_map[faction_name] = self.__get_faction_object(faction, reputation)
 
+    @staticmethod
     def __get_faction_object(faction, reputation=None):
         return {
             'faction': faction,
@@ -21,12 +22,12 @@ class FactionReputs(object):
         }
 
     def get_faction(self, faction_name):
-        if (faction_name not in self.__faction_map):
+        if faction_name not in self.__faction_map:
             return None
         return self.__faction_map[faction_name]['faction']
 
     def get_faction_reputation(self, faction_name):
-        if (faction_name not in self.__faction_map):
+        if faction_name not in self.__faction_map:
             return None
         return self.__faction_map[faction_name]['reputation']
 
@@ -34,7 +35,7 @@ class FactionReputs(object):
         for faction_file in game_file['factionMap']:
             faction_type = faction_file['faction']['type']
             if faction_type == 'universal':
-                faction = UniversalFaction()
+                faction = UniversalFaction(None)
             else:
                 raise ValueError('Faction of type "{0}" unsupported'.format(faction_type))
             faction.load_file(faction_file['faction'])

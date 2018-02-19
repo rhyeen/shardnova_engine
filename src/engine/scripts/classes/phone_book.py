@@ -31,8 +31,10 @@ class PhoneBook(object):
         return phones
 
     def has_any_phone(self, phones):
+        unique_phones = set(phones)
+        unique_phones = set([x for x in unique_phones if x is not None])
         _phones = self.get_all_phones()
-        common_phones = list(set(phones).intersection(_phones))
+        common_phones = list(unique_phones.intersection(_phones))
         return len(common_phones) != 0
 
     def get_primary_phone_number(self):
@@ -61,3 +63,8 @@ class PhoneBook(object):
 
     def reset_phone_book(self):
         self.__phones = self.__get_phones_config()
+
+    def load_file(self, game_file):
+        self.__phones['primary'] = game_file['primary']
+        self.__phones['secondary'] = game_file['secondary']
+        self.__phones['other'] = game_file['other']

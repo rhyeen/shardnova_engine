@@ -22,7 +22,7 @@ class Universe(object):
         if not self.__galaxy_name_exists(name):
             raise ValueError('{0} is not found.'.format(name))
         index = self.__get_galaxy_index_named(name)
-        self.__get_galaxy(self, index)
+        return self.__get_galaxy(index)
 
     def __get_galaxy(self, galaxy_index):
         return self.__galaxies[galaxy_index]
@@ -43,7 +43,7 @@ class Universe(object):
 
     def __get_galaxy_index_named(self, galaxy_name):
         for index, __galaxy in enumerate(self.__galaxies):
-            if (__galaxy.get_name() == galaxy_name):
+            if __galaxy.get_name() == galaxy_name:
                 return index
         return None
 
@@ -54,7 +54,7 @@ class Universe(object):
         if not self.__galaxy_exists(galaxy):
             raise ValueError('{0} is not found.'.format(galaxy))
         index = self.__get_galaxy_index(galaxy)
-        self.__remove_galaxy(self, index)
+        self.__remove_galaxy(index)
 
     def __remove_galaxy(self, galaxy_index):
         del self.__galaxies[galaxy_index]
@@ -86,6 +86,7 @@ class Universe(object):
         for galaxy_file in game_file['galaxies']:
             galaxy = Galaxy(self.__data_handler)
             galaxy.load_file(galaxy_file)
+            self.add_galaxy(galaxy)
         self.__starting_galaxy = Galaxy(self.__data_handler)
         self.__starting_galaxy.load_file(game_file['startingGalaxy'])
         self.__starting_sector = self.__starting_galaxy.get_sectors()[0]

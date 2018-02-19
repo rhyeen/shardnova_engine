@@ -88,6 +88,7 @@ class System(object):
             celestial_body = AsteroidBelt(self.__data_handler)
         elif celestial_body_type == 'startingFactory':
             celestial_body = StartingFactory(self.__data_handler)
+            self.__starting_factory = celestial_body
         else:
             raise ValueError('Celestial body of type "{0}" unsupported'.format(celestial_body_type))
         celestial_body.load_file(game_file)

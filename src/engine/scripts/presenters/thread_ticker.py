@@ -14,7 +14,8 @@ class ThreadTicker(object):
         self.__time_keeper = time_keeper
         self.__kill_switch = kill_switch
         self.__is_console_tick = False
-        self.__tick_duration = None
+        self.__tick_duration = tick_duration
+        self.__thread_worker = None
 
     def get_thread(self):
         self.__thread_worker = ThreadWorker(self.__tick_duration,

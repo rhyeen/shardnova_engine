@@ -27,6 +27,10 @@ class SmsCredits(object):
 
     def use_credits(self, amount=1):
         self.__remaining_credits -= amount
-        if (self.__remaining_credits < 0):
+        if self.__remaining_credits < 0:
             self.__remaining_credits = 0
             raise ValueError('No credits remain')
+
+    def load_file(self, game_file):
+        self.__max_credits = game_file['maxCredits']
+        self.__remaining_credits = game_file['remainingCredits']

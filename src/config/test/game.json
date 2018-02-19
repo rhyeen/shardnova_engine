@@ -28,7 +28,7 @@
                                                 }
                                             ]
                                         },
-                                        "distranceToPrev": 4
+                                        "distanceToPrev": 4
                                     }
                                 ]
                             }
@@ -49,22 +49,25 @@
                                 {
                                     "celestialBody": {
                                         "type": "star",
-                                        "name": "starS"
+                                        "name": "starS",
+                                        "satellites": []
                                     }
                                 },
                                 {
                                     "celestialBody": {
                                         "type": "planet",
-                                        "name": "planetS"
+                                        "name": "planetS",
+                                        "satellites": []
                                     },
-                                    "distranceToPrev": 5
+                                    "distanceToPrev": 5
                                 },
                                 {
                                     "celestialBody": {
                                         "type": "startingFactory",
-                                        "name": "startingFactoryS"
+                                        "name": "startingFactoryS",
+                                        "satellites": []
                                     },
-                                    "distranceToPrev": 4
+                                    "distanceToPrev": 4
                                 },
                                 {
                                     "celestialBody": {
@@ -76,12 +79,10 @@
                                                 "name": "hyperspaceGateS",
                                                 "jumpPoints": [
                                                     {
-                                                        "coordinates": {
-                                                            "galaxy": "galaxy1",
-                                                            "sector": "sector1a",
-                                                            "system": "system1a1",
-                                                            "celestialBody": "cb1a1b"
-                                                        },
+                                                        "galaxy": "galaxy1",
+                                                        "sector": "sector1a",
+                                                        "system": "system1a1",
+                                                        "celestialBody": "cb1a1b",
                                                         "ticksPerJump": 40,
                                                         "costPerJump": 1000
                                                     }
@@ -89,7 +90,7 @@
                                             }
                                         ]
                                     },
-                                    "distranceToPrev": 3
+                                    "distanceToPrev": 3
                                 }
                             ]
                         }
@@ -103,7 +104,18 @@
             "outputHandler": "console",
             "id": "user1",
             "accountDetails": {
-
+                "phoneBook": {
+                    "primary": "8018018001",
+                    "secondary": null,
+                    "other": []
+                },
+                "patreonDetails": {
+                    "id": "1234"
+                },
+                "smsCredits": {
+                    "maxCredits": 500,
+                    "remainingCredits": 1
+                }
             },
             "character": {
                 "bank": {
@@ -148,7 +160,8 @@
                                 "celestialBody": null,
                                 "course": {
                                     "source": "cb1a1a",
-                                    "destination": "cb1a1b"
+                                    "destination": "cb1a1b",
+                                    "distanceToDestination": 5
                                 }
                             },
                             "fuel": 0

@@ -95,7 +95,7 @@ class OrbitalPlane(object):
             self.push(celestial_body, distance_to_previous_celestial_body)
             return
         prev_edge = prev_node.next_edge
-        if (distance_to_previous_celestial_body > prev_edge):
+        if distance_to_previous_celestial_body > prev_edge:
             raise ValueError('distance_to_previous_celestial_body ({0}) cannot be greater than '
                              'the distance between previous_celestial_body\'s '
                              'and the next celestial body ({1})'

@@ -12,3 +12,6 @@ class PatreonDetails(object):
 
     def set_patreon_id(self, patreon_id):
         self.__patreon_id = patreon_id
+
+    def load_file(self, game_file):
+        self.__patreon_id = game_file['id']

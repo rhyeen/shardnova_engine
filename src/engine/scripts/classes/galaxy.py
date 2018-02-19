@@ -31,7 +31,7 @@ class Galaxy(object):
         if not self.__sector_name_exists(name):
             raise ValueError('{0} is not found.'.format(name))
         index = self.__get_sector_index_named(name)
-        self.__get_sector(self, index)
+        return self.__get_sector(index)
 
     def __get_sector(self, sector_index):
         return self.__sectors[sector_index]
@@ -46,7 +46,7 @@ class Galaxy(object):
 
     def __get_sector_index(self, sector):
         for index, __sector in enumerate(self.__sectors):
-            if (__sector.get_name() == sector.get_name()):
+            if __sector.get_name() == sector.get_name():
                 return index
         return None
 
@@ -55,7 +55,7 @@ class Galaxy(object):
 
     def __get_sector_index_named(self, sector_name):
         for index, __sector in enumerate(self.__sectors):
-            if (__sector.get_name() == sector_name):
+            if __sector.get_name() == sector_name:
                 return index
         return None
 
@@ -66,7 +66,7 @@ class Galaxy(object):
         if not self.__sector_exists(sector):
             raise ValueError('{0} is not found.'.format(sector))
         index = self.__get_sector_index(sector)
-        self.__remove_sector(self, index)
+        self.__remove_sector(index)
 
     def __remove_sector(self, sector_index):
         del self.__sectors[sector_index]
@@ -89,3 +89,4 @@ class Galaxy(object):
         for sector_file in game_file['sectors']:
             sector = Sector(self.__data_handler)
             sector.load_file(sector_file)
+            self.add_sector(sector)
