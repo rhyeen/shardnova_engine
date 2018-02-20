@@ -196,9 +196,11 @@ class MyFunctionalTester(FunctionalTester):
         assert ('Distance remaining: 2.0 pu' in output_records[4])
         assert ('ETA: 1 ticks' in output_records[4])
         self.__tick()
-        self.__get_command('check_course')()
         assert (len(output_records) == 6)
-        assert (output_records[5] == 'No directive set.')
+        assert ('reached Planet: planetS' in output_records[5])
+        self.__get_command('check_course')()
+        assert (len(output_records) == 7)
+        assert (output_records[6] == 'No directive set.')
 
     def test_further_ahead_course(self):
         """ New course further than original course, and new course in same direction.
@@ -284,13 +286,15 @@ class MyFunctionalTester(FunctionalTester):
         assert ('2.0 pu' in output_records[3])
         assert ('ETA: 1 ticks' in output_records[3])
         self.__tick()
+        assert (len(output_records) == 5)
+        assert ('reached Planet: planetS' in output_records[4])
         self.__tick()
         self.__get_command('check_course')()
-        assert (len(output_records) == 5)
-        assert (output_records[4] == 'No directive set.')
-        self.__get_command('get_map')()
         assert (len(output_records) == 6)
-        assert ('Currently orbiting Planet: planetS' in output_records[5])
+        assert (output_records[5] == 'No directive set.')
+        self.__get_command('get_map')()
+        assert (len(output_records) == 7)
+        assert ('Currently orbiting Planet: planetS' in output_records[6])
 
     def __tick(self):
         self.bootstrapper.time_keeper.tick()

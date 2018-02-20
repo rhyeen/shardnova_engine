@@ -68,3 +68,6 @@ class ConsoleOutputHandler(OutputHandler):
 
     def invalid_index(self, index):
         self.__report('Invalid index')
+
+    def reached_destination(self, drone, course):
+        self.__report('{0} reached {1}'.format(drone, course.get_destination()))

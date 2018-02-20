@@ -56,7 +56,7 @@ class User(object):
         return self.get_phone_book().get_primary_phone_number()
 
     def tick(self):
-        self.character.tick()
+        self.character.tick(self.output_handler)
 
     def load_file(self, game_file, universe):
         self.__load_output_handler(game_file)

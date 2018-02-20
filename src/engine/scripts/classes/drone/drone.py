@@ -31,8 +31,10 @@ class Drone(ABC):
     def get_inventory(self):
         return self.__inventory
 
-    def tick(self):
-        self.coordinates.tick()
+    def tick(self, output_handler):
+        finished, course = self.coordinates.tick()
+        if finished:
+            output_handler.reached_destination(self, course)
         if self.coordinates.on_course():
             self.__use_fuel()
 

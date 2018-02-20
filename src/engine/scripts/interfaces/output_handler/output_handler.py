@@ -40,3 +40,7 @@ class OutputHandler(ABC):
     @abstractmethod
     def invalid_index(self, index):
         pass
+
+    @abstractmethod
+    def reached_destination(self, drone, course):
+        pass
