@@ -43,19 +43,25 @@ class Course(object):
         course_left = course.get_distance_to_destination()
         course_total_distance = self.__get_distance_to_celestial_body(source, destination)
         course_traveled = course_total_distance - course_left
-        if self.__course_requires_u_turn(source, destination):
+        if self.__course_requires_u_turn(destination, course_traveled):
             # If we make a u-turn, the original course's destination should act as this course's
             # source to ensure that if a course correction happens again, we don't leap
             # space.
             self.__source = destination
-            return distance + course_traveled
+            new_distance = self.__get_distance_to_celestial_body(self.__source, self.__destination)
+            return new_distance - course_left
         else:
             return distance - course_traveled
 
-    def __course_requires_u_turn(self, course_source, course_destination):
-        distance_to_course_source = self.__get_distance_to_celestial_body(self.__destination, course_source)
-        distance_to_course_destination = self.__get_distance_to_celestial_body(self.__destination, course_destination)
-        return distance_to_course_destination > distance_to_course_source
+    def __course_requires_u_turn(self, current_course_destination, course_traveled):
+        current_course_distance = self.__get_distance_to_celestial_body(self.__source, current_course_destination)
+        current_dest_to_next_dest = self.__get_distance_to_celestial_body(current_course_destination, self.__destination)
+        current_source_to_next_dest = self.__get_distance_to_celestial_body(self.__source, self.__destination)
+        in_between_current_course = abs(current_dest_to_next_dest - current_source_to_next_dest) != current_course_distance
+        if in_between_current_course:
+            return course_traveled > current_source_to_next_dest
+        else:
+            return current_dest_to_next_dest > current_source_to_next_dest
 
     def __get_distance_to_celestial_body(self, source, destination):
         coordinates = self.__drone.coordinates
@@ -102,4 +108,4 @@ class Course(object):
 
     def get_required_fuel_for_course(self):
         fuel_per_distance = self.__drone.get_fuel_per_distance()
-        return fuel_per_distance * self.__get_distance_to_destination()
+        return fuel_per_distance * self.get_distance_to_destination()

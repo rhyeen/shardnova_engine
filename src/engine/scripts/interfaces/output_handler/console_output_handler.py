@@ -1,5 +1,6 @@
 """ Container for ConsoleOutputHandler
 """
+import math
 from scripts.interfaces.output_handler.output_handler import OutputHandler
 
 
@@ -23,21 +24,21 @@ class ConsoleOutputHandler(OutputHandler):
 
     def on_course(self, fuel_use, drone_fuel, destination, distance, ticks_to_finished):
         self.__report('On course to: {0}\n'
-                      'Journey will consume {1}/{2} fuel to travel {3} pu.\n'
-                      'ETA: {4}'
-                      .format(destination, fuel_use, drone_fuel, distance, ticks_to_finished))
+                      'Journey will consume {1:0.1f}/{2:0.1f} fuel to travel {3:0.1f} pu.\n'
+                      'ETA: {4} ticks'
+                      .format(destination, fuel_use, drone_fuel, distance, math.ceil(ticks_to_finished)))
 
     def insufficient_fuel(self, destination, fuel_use, drone_fuel):
         self.__report('Insufficient fuel to reach {0}.\n'
-                      'Journey requires {1} fuel with only {2} available.'
+                      'Journey requires {1:0.1f} fuel with only {2:0.1f} available.'
                       .format(destination, fuel_use, drone_fuel))
 
     def check_course(self, destination, distance, ticks_to_finished, drone_fuel):
         self.__report('On course to: {0}\n'
-                      'Fuel remaining: {1}\n'
-                      'Distance remaining: {2}\n'
-                      'ETA: {3}'
-                      .format(destination, drone_fuel, distance, ticks_to_finished))
+                      'Fuel remaining: {1:0.1f}\n'
+                      'Distance remaining: {2:0.1f} pu\n'
+                      'ETA: {3} ticks'
+                      .format(destination, drone_fuel, distance, math.ceil(ticks_to_finished)))
 
     def no_course(self):
         self.__report('No directive set.')
@@ -49,9 +50,9 @@ class ConsoleOutputHandler(OutputHandler):
 
     @staticmethod
     def __get_basic_map(galaxy, sector, system):
-        message = ('Galaxy: {0}\n'
-                   'Sector: {1}\n'
-                   'System: {2}\n'
+        message = ('{0}\n'
+                   '{1}\n'
+                   '{2}\n'
                    'Destinations within system:\n').format(galaxy, sector, system)
         for index, celestial_body in enumerate(system.get_celestial_bodies()):
             message += '{0}: {1}\n'.format(index, celestial_body)

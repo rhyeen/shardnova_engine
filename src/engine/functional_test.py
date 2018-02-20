@@ -86,30 +86,211 @@ class MyFunctionalTester(FunctionalTester):
                                 game_file,
                                 test_config)
 
-    def test_in_system_courses(self):
-        self.run_test(self._test_in_system_courses)
+    def test_external_u_turn(self):
+        """ Setting course, then setting a new course in opposite direction,
+            past the original source.
+        """
+        self.run_test(self._test_external_u_turn)
 
-    def _test_in_system_courses(self, args=None):
+    def _test_external_u_turn(self, args=None):
         test_config = {
-            'preserve_output': True
+            'preserve_output': True,
+            'silence_output': True
         }
         self.bootstrapper = self.get_bootstrapper(self.game_file, test_config)
         output_records = self.__get_output_records()
         assert(len(output_records) == 1)
+        assert(output_records[0] == 'Welcome to Shardnova!\nType any command to continue.')
+        # star <-5-> planet <-4-> starting factory <-3-> beacon
+        # drone starts at starting factory, set course to star
+        # ProbeDrone: distance traveled per tick: 2
+        # ProbeDrone: fuel per distance: 0.2
         self.__get_command('set_course')(0)
-        assert(len(output_records) == 2)
-        self.__tick()
-        self.__tick()
+        assert (len(output_records) == 2)
+        assert('On course to: Star: starS' in output_records[1])
+        assert('1.8/20.0 fuel' in output_records[1])
+        assert('9.0 pu' in output_records[1])
+        assert('ETA: 5 ticks' in output_records[1])
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__tick()  # 2pu, 0.4 fuel
         self.__get_command('check_course')()
         assert (len(output_records) == 3)
+        assert('On course to: Star: starS' in output_records[2])
+        assert('Fuel remaining: 18.4' in output_records[2])
+        assert('Distance remaining: 1.0 pu' in output_records[2])
+        assert('ETA: 1 ticks' in output_records[2])
         self.__get_command('get_map')()
         assert (len(output_records) == 4)
+        assert('Galaxy: galaxyS' in output_records[3])
+        assert('Sector: sectorS' in output_records[3])
+        assert('System: systemS' in output_records[3])
+        assert('0: Star: starS' in output_records[3])
+        assert('1: Planet: planetS' in output_records[3])
+        assert('1: Planet: planetS' in output_records[3])
+        assert('2: startingFactoryS' in output_records[3])
+        assert('3: Beacon: beaconS' in output_records[3])
+        assert('On course from startingFactoryS to Star: starS' in output_records[3])
         self.__get_command('set_course')(3)
         assert (len(output_records) == 5)
+        assert ('On course to: Beacon: beaconS' in output_records[4])
+        assert ('2.2/18.4 fuel' in output_records[4])
+        assert ('11.0 pu' in output_records[4])
+        assert ('ETA: 6 ticks' in output_records[4])
         self.__tick()
         self.__tick()
         self.__get_command('check_course')()
         assert (len(output_records) == 6)
+        assert ('On course to: Beacon: beaconS' in output_records[5])
+        assert ('Fuel remaining: 17.6' in output_records[5])
+        assert ('Distance remaining: 7.0 pu' in output_records[5])
+        assert ('ETA: 4 ticks' in output_records[5])
+
+    def test_internal_u_turn(self):
+        """ Setting course, then setting a new course in opposite direction,
+            but not past the original source.
+        """
+        self.run_test(self._test_internal_u_turn)
+
+    def _test_internal_u_turn(self, args=None):
+        test_config = {
+            'preserve_output': True,
+            'silence_output': True
+        }
+        self.bootstrapper = self.get_bootstrapper(self.game_file, test_config)
+        output_records = self.__get_output_records()
+        assert(len(output_records) == 1)
+        assert(output_records[0] == 'Welcome to Shardnova!\nType any command to continue.')
+        # star <-5-> planet <-4-> starting factory <-3-> beacon
+        # drone starts at starting factory, set course to star
+        # ProbeDrone: distance traveled per tick: 2
+        # ProbeDrone: fuel per distance: 0.2
+        self.__get_command('set_course')(0)
+        assert (len(output_records) == 2)
+        assert('On course to: Star: starS' in output_records[1])
+        assert('1.8/20.0 fuel' in output_records[1])
+        assert('9.0 pu' in output_records[1])
+        assert('ETA: 5 ticks' in output_records[1])
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__get_command('check_course')()
+        assert (len(output_records) == 3)
+        assert('On course to: Star: starS' in output_records[2])
+        assert('Fuel remaining: 18.4' in output_records[2])
+        assert('Distance remaining: 1.0 pu' in output_records[2])
+        assert('ETA: 1 ticks' in output_records[2])
+        self.__get_command('set_course')(1)
+        assert (len(output_records) == 4)
+        assert ('On course to: Planet: planetS' in output_records[3])
+        assert ('0.8/18.4 fuel' in output_records[3])
+        assert ('4.0 pu' in output_records[3])
+        assert ('ETA: 2 ticks' in output_records[3])
+        self.__tick()
+        self.__get_command('check_course')()
+        assert (len(output_records) == 5)
+        assert ('On course to: Planet: planetS' in output_records[4])
+        assert ('Fuel remaining: 18.0' in output_records[4])
+        assert ('Distance remaining: 2.0 pu' in output_records[4])
+        assert ('ETA: 1 ticks' in output_records[4])
+        self.__tick()
+        self.__get_command('check_course')()
+        assert (len(output_records) == 6)
+        assert (output_records[5] == 'No directive set.')
+
+    def test_further_ahead_course(self):
+        """ New course further than original course, and new course in same direction.
+        """
+        self.run_test(self._test_further_ahead_course)
+
+    def _test_further_ahead_course(self, args=None):
+        test_config = {
+            'preserve_output': True,
+            'silence_output': True
+        }
+        self.bootstrapper = self.get_bootstrapper(self.game_file, test_config)
+        output_records = self.__get_output_records()
+        assert(len(output_records) == 1)
+        assert(output_records[0] == 'Welcome to Shardnova!\nType any command to continue.')
+        # star <-5-> planet <-4-> starting factory <-3-> beacon
+        # drone starts at starting factory, set course to star
+        # ProbeDrone: distance traveled per tick: 2
+        # ProbeDrone: fuel per distance: 0.2
+        self.__get_command('set_course')(1)
+        assert (len(output_records) == 2)
+        assert('On course to: Planet: planetS' in output_records[1])
+        assert('0.8/20.0 fuel' in output_records[1])
+        assert('4.0 pu' in output_records[1])
+        assert('ETA: 2 ticks' in output_records[1])
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__get_command('check_course')()
+        assert (len(output_records) == 3)
+        assert('On course to: Planet: planetS' in output_records[2])
+        assert('Fuel remaining: 19.6' in output_records[2])
+        assert('Distance remaining: 2.0 pu' in output_records[2])
+        assert('ETA: 1 ticks' in output_records[2])
+        self.__get_command('set_course')(0)
+        assert (len(output_records) == 4)
+        assert ('On course to: Star: starS' in output_records[3])
+        assert ('1.4/19.6 fuel' in output_records[3])
+        assert ('7.0 pu' in output_records[3])
+        assert ('ETA: 4 ticks' in output_records[3])
+        self.__tick()
+        self.__tick()
+        self.__get_command('check_course')()
+        assert (len(output_records) == 5)
+        assert ('On course to: Star: starS' in output_records[4])
+        assert ('Fuel remaining: 18.8' in output_records[4])
+        assert ('Distance remaining: 3.0 pu' in output_records[4])
+        assert ('ETA: 2 ticks' in output_records[4])
+
+    def test_cutting_course_short(self):
+        """ Original course further than new course, and new course in same direction.
+        """
+        self.run_test(self._test_cutting_course_short)
+
+    def _test_cutting_course_short(self, args=None):
+        test_config = {
+            'preserve_output': True,
+            'silence_output': True
+        }
+        self.bootstrapper = self.get_bootstrapper(self.game_file, test_config)
+        output_records = self.__get_output_records()
+        assert(len(output_records) == 1)
+        assert(output_records[0] == 'Welcome to Shardnova!\nType any command to continue.')
+        # star <-5-> planet <-4-> starting factory <-3-> beacon
+        # drone starts at starting factory, set course to star
+        # ProbeDrone: distance traveled per tick: 2
+        # ProbeDrone: fuel per distance: 0.2
+        self.__get_command('set_course')(0)
+        assert (len(output_records) == 2)
+        assert ('On course to: Star: starS' in output_records[1])
+        assert ('1.8/20.0 fuel' in output_records[1])
+        assert ('9.0 pu' in output_records[1])
+        assert ('ETA: 5 ticks' in output_records[1])
+        self.__tick()  # 2pu, 0.4 fuel
+        self.__get_command('check_course')()
+        assert (len(output_records) == 3)
+        assert('On course to: Star: starS' in output_records[2])
+        assert('Fuel remaining: 19.6' in output_records[2])
+        assert('Distance remaining: 7.0 pu' in output_records[2])
+        assert('ETA: 4 ticks' in output_records[2])
+        self.__get_command('set_course')(1)
+        assert (len(output_records) == 4)
+        assert ('On course to: Planet: planetS' in output_records[3])
+        assert ('0.4/19.6 fuel' in output_records[3])
+        assert ('2.0 pu' in output_records[3])
+        assert ('ETA: 1 ticks' in output_records[3])
+        self.__tick()
+        self.__tick()
+        self.__get_command('check_course')()
+        assert (len(output_records) == 5)
+        assert (output_records[4] == 'No directive set.')
+        self.__get_command('get_map')()
+        assert (len(output_records) == 6)
+        assert ('Currently orbiting Planet: planetS' in output_records[5])
 
     def __tick(self):
         self.bootstrapper.time_keeper.tick()
@@ -124,7 +305,10 @@ class MyFunctionalTester(FunctionalTester):
 def run_tests(functional_test):
     """ All test cases should be ran in here for organization.
     """
-    functional_test.test_in_system_courses()
+    functional_test.test_external_u_turn()
+    functional_test.test_internal_u_turn()
+    functional_test.test_further_ahead_course()
+    functional_test.test_cutting_course_short()
 
 
 def get_args():
