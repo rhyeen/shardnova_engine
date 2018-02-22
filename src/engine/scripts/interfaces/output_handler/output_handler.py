@@ -14,6 +14,10 @@ class OutputHandler(ABC):
         pass
 
     @abstractmethod
+    def already_at_course_desintation(self, destination):
+        pass
+
+    @abstractmethod
     def insufficient_fuel(self, destination, fuel_use, drone_fuel):
         pass
 

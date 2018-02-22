@@ -17,8 +17,8 @@ class Course(object):
         if distance_to_destination is None:
             distance_to_destination = self.__get_distance_to_destination()
         self.__distance_to_destination = distance_to_destination
-        self.__finished = False
-        self.__paused = False
+        self.__finished = self.__distance_to_destination == 0
+        self.__paused = self.__distance_to_destination == 0
 
     def __str__(self):
         return '{0} --> {1} :: {2} pu'.format(self.__source, self.__destination, self.__distance_to_destination)
@@ -91,14 +91,19 @@ class Course(object):
 
     def tick(self):
         if self.__paused:
-            return
-        self.__decrement_distance()
+            return 0
+        distance_traveled = self.__decrement_distance()
         self.__finished = self.__distance_to_destination == 0
+        return distance_traveled
 
     def __decrement_distance(self):
-        self.__distance_to_destination -= self.__drone.get_distance_per_tick()
-        if self.__distance_to_destination < 0:
-            self.__distance_to_destination = 0
+        distance_per_tick = self.__drone.get_distance_per_tick()
+        self.__distance_to_destination -= distance_per_tick
+        if self.__distance_to_destination > 0:
+            return distance_per_tick
+        distance_traveled = distance_per_tick + self.__distance_to_destination
+        self.__distance_to_destination = 0
+        return distance_traveled
 
     def get_distance_to_destination(self):
         return self.__distance_to_destination

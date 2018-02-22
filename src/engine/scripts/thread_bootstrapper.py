@@ -33,7 +33,7 @@ class ThreadBootstrapper(object):
         self.__kill_switch = KillSwitch()
         self.__thread_user_controller = None
         data_handler = RandomStringTestHandler()
-        game = Game(data_handler)
+        game = Game(data_handler, test_config)
         self.__interactor = Interactor(data_handler, game)
         self.__time_keeper = TimeKeeper(game)
         self.__interactor.initialize_game()

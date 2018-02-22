@@ -29,7 +29,7 @@ class SyncBootstrapper(object):
         self.environment = environment
         self._is_test = self._is_test_run()
         data_handler = RandomStringTestHandler()
-        game = Game(data_handler)
+        game = Game(data_handler, test_config)
         self.__interactor = Interactor(data_handler, game)
         self.time_keeper = TimeKeeper(game)
         if not game_file:

@@ -8,10 +8,11 @@ from scripts.classes.drone.probe_drone import ProbeDrone
 
 class Game(object):
 
-    def __init__(self, data_handler):
+    def __init__(self, data_handler, test_config=None):
         self.universe = None
         self.users = None
         self.__data_handler = data_handler
+        self.test_config = test_config
 
     def initialize_game(self):
         self.universe = Universe(self.__data_handler)
@@ -30,6 +31,8 @@ class Game(object):
             return False
         drone = ProbeDrone(self.__data_handler)
         drone.fuel = 20
+        if self.test_config and 'starting_fuel' in self.test_config:
+            drone.fuel = self.test_config['starting_fuel']
         user.character.drone_warehouse.add_drone(drone)
         user.character.drone_warehouse.activate_drone(drone)
         drone.coordinates = Coordinates()

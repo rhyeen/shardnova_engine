@@ -32,6 +32,9 @@ class Coordinates(object):
 
     def set_course(self, course):
         self.__course = course
+        if self.__course.is_finished():
+            self.set_celestial_body(self.__course.get_destination())
+            return
         self.__celestial_body = None
 
     def get_course(self):
@@ -42,12 +45,12 @@ class Coordinates(object):
 
     def tick(self):
         if not self.on_course():
-            return False, None
-        self.__course.tick()
-        if not self.__course.is_finished():
-            return False, None
-        course = self.set_celestial_body(self.__course.get_destination())
-        return True, course
+            return 0, None
+        distance_traveled = self.__course.tick()
+        course = self.__course
+        if self.__course.is_finished():
+            course = self.set_celestial_body(self.__course.get_destination())
+        return distance_traveled, course
 
     def load_file(self, game_file, universe, drone=None):
         self.galaxy = universe.get_galaxy(game_file['galaxy'])

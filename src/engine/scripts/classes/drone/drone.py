@@ -32,14 +32,14 @@ class Drone(ABC):
         return self.__inventory
 
     def tick(self, output_handler):
-        finished, course = self.coordinates.tick()
-        if finished:
+        distance_traveled, course = self.coordinates.tick()
+        if distance_traveled > 0:
+            self.__use_fuel(distance_traveled)
+        if course and course.is_finished():
             output_handler.reached_destination(self, course)
-        if self.coordinates.on_course():
-            self.__use_fuel()
 
-    def __use_fuel(self):
-        self.fuel -= self.__get_fuel_per_tick()
+    def __use_fuel(self, distance_traveled):
+        self.fuel -= self.get_fuel_per_distance() * distance_traveled
         if self.fuel >= 0:
             return
         self.fuel = 0
@@ -66,9 +66,6 @@ class Drone(ABC):
             if item.modifies_fuel_per_distance():
                 modification += item.modifies_fuel_per_distance()
         return self.get_default_fuel_per_distance() * modification
-
-    def __get_fuel_per_tick(self):
-        return self.get_distance_per_tick() * self.get_fuel_per_distance()
 
     @abstractmethod
     def get_default_fuel_per_distance(self):

@@ -23,10 +23,14 @@ class ConsoleOutputHandler(OutputHandler):
                       'Type any command to continue.')
 
     def on_course(self, fuel_use, drone_fuel, destination, distance, ticks_to_finished):
-        self.__report('On course to: {0}\n'
+        self.__report('On course to {0}\n'
                       'Journey will consume {1:0.1f}/{2:0.1f} fuel to travel {3:0.1f} pu.\n'
                       'ETA: {4} ticks'
                       .format(destination, fuel_use, drone_fuel, distance, math.ceil(ticks_to_finished)))
+
+    def already_at_course_desintation(self, destination):
+        self.__report('Set destination is within no burn range.\n'
+                      'Orbiting {0} now.'.format(destination))
 
     def insufficient_fuel(self, destination, fuel_use, drone_fuel):
         self.__report('Insufficient fuel to reach {0}.\n'
@@ -34,7 +38,7 @@ class ConsoleOutputHandler(OutputHandler):
                       .format(destination, fuel_use, drone_fuel))
 
     def check_course(self, destination, distance, ticks_to_finished, drone_fuel):
-        self.__report('On course to: {0}\n'
+        self.__report('On course to {0}\n'
                       'Fuel remaining: {1:0.1f}\n'
                       'Distance remaining: {2:0.1f} pu\n'
                       'ETA: {3} ticks'
