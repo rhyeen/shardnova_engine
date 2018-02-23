@@ -48,3 +48,41 @@ class OutputHandler(ABC):
     @abstractmethod
     def reached_destination(self, drone, course):
         pass
+
+    @abstractmethod
+    def distress_signal_sending(self, distress_signal):
+        message = ('Sending distress signal {0} with request: {1}'
+                   .format(distress_signal, distress_signal.get_request()))
+        self.__report(message)
+
+    @abstractmethod
+    def distress_signal_recieved(self, distress_signal):
+        pass
+
+    @abstractmethod
+    def distress_signal_offer_sending(self, distress_signal_offer):
+        pass
+
+    @abstractmethod
+    def distress_signal_offer_received(self, distress_signal_offer):
+        pass
+
+    @abstractmethod
+    def distress_signal_offer_accepted(self, distress_signal):
+        pass
+
+    @abstractmethod
+    def distress_signal_offer_rejected(self, distress_signal):
+        pass
+
+    @abstractmethod
+    def distress_signal_dropped(self, distress_signal):
+        pass
+
+    @abstractmethod
+    def accepting_distress_signal_offer(self, distress_signal_offer):
+        pass
+
+    @abstractmethod
+    def rejecting_distress_signal_offer(self, distress_signal_offer):
+        pass

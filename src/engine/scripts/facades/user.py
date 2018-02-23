@@ -11,7 +11,7 @@ class User(object):
         self.__data_handler = data_handler
         self.output_handler = output_handler
         self.__account_details = AccountDetails()
-        self.character = PlayerCharacter(self.__data_handler)
+        self.character = PlayerCharacter(self.__data_handler, self.output_handler)
         if user_id is None:
             user_id = self.__get_unique_id()
         self.__id = user_id
@@ -56,7 +56,7 @@ class User(object):
         return self.get_phone_book().get_primary_phone_number()
 
     def tick(self):
-        self.character.tick(self.output_handler)
+        self.character.tick()
 
     def load_file(self, game_file, universe):
         self.__load_output_handler(game_file)
@@ -68,5 +68,6 @@ class User(object):
         output_handler_type = game_file['outputHandler']
         if output_handler_type == 'console':
             self.output_handler = ConsoleOutputHandler()
+            self.character.set_output_handler(self.output_handler)
         else:
             raise ValueError('Output handler of type "{0}" unsupported'.format(output_handler_type))

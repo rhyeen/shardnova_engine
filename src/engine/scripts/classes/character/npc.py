@@ -7,3 +7,6 @@ class Npc(Character):
 
     def _load_file_specifics(self, game_file):
         pass
+
+    def make_choices(self):
+        pass

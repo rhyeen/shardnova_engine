@@ -6,6 +6,9 @@ from scripts.classes.inventory.basic_inventory import BasicInventory
 
 class ProbeDrone(Drone):
 
+    def get_drone_type():
+        return 'Probe Drone'
+
     @staticmethod
     def _get_default_inventory():
         return BasicInventory()

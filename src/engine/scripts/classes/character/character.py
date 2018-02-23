@@ -8,11 +8,25 @@ from scripts.classes.drone_warehouse import DroneWarehouse
 
 class Character(ABC):
 
-    def __init__(self, data_handler):
+    def __init__(self, data_handler, output_handler):
         self.__data_handler = data_handler
+        self._output_handler = output_handler
+        self.__id = self.__get_unique_id()
         self.__bank = Bank()
         self.__faction_reputs = FactionReputs()
         self.drone_warehouse = DroneWarehouse(self.__data_handler)
+
+    def __str__(self):
+        return 'Character: {0}'.format(self.get_id())
+
+    def __get_unique_id(self):
+        return self.__data_handler.get_unique_id('character')
+
+    def get_id(self):
+        return self.__id
+
+    def set_output_handler(self, output_handler):
+        self._output_handler = output_handler
 
     def load_file(self, game_file, universe):
         self._load_file_generics(game_file, universe)
@@ -39,6 +53,6 @@ class Character(ABC):
             return None
         return active_drones[0]
 
-    def tick(self, output_handler):
+    def tick(self):
         for drone in self.drone_warehouse.get_active_drones():
-            drone.tick(output_handler)
+            drone.tick(self._output_handler)
