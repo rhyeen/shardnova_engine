@@ -15,7 +15,12 @@ class Drone(ABC):
         self.fuel = 0
 
     def __str__(self):
-        return 'Drone: {0}'.format(self.get_id())
+        return '{0}: {1}'.format(self.get_drone_type(), self.get_id())
+
+    @staticmethod
+    @abstractmethod
+    def get_drone_type():
+        return 'Unidentified Drone'
 
     def __get_unique_id(self):
         return self.__data_handler.get_unique_id('drone')

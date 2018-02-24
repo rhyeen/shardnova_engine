@@ -5,6 +5,10 @@ from scripts.classes.item.item import Item
 
 class FuelCompressionValve(Item):
 
+    @staticmethod
+    def get_item_type(self):
+        return 'Fuel Compression Valve'
+
     def modifies_fuel_per_distance(self):
         return self._alter_by_durability(0.8)
 

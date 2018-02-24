@@ -9,7 +9,7 @@ class Interactor(object):
     def __init__(self, data_handler, game):
         """ game must come preloaded
         """
-        self.__data_handler = data_handler
+        self.data_handler = data_handler
         self.__game = game
 
     def initialize_game(self):
@@ -19,7 +19,7 @@ class Interactor(object):
         self.__game.load_game_file(game_file)
 
     def create_phone_user(self, phone, output_handler):
-        user = User(self.__data_handler, output_handler)
+        user = User(self.data_handler, output_handler)
         user.set_primary_phone(phone)
         is_new_user = self.__game.new_user(user)
         if is_new_user:
@@ -75,3 +75,17 @@ class Interactor(object):
         distance_per_tick = course.get_distance_per_tick()
         ticks_to_finished = distance_to_destination / distance_per_tick
         user.output_handler.check_course(celestial_body, distance_to_destination, ticks_to_finished, drone.fuel)
+
+    def send_distress_signal(self, user, distress_signal):
+        user.output_handler.send_distress_signal(distress_signal)
+        self.__game.add_signal(distress_signal)
+
+    def send_distress_response_offer(self, user, distress_response_offer):
+        user.output_handler.send_distress_response_offer(distress_response_offer)
+        self.__game.add_signal(distress_response_offer)
+
+    def accept_distress_response_offer(self, user, distress_response_offer):
+        user.output_handler.accept_distress_response_offer(distress_response_offer)
+
+    def reject_distress_response_offer(self, user, distress_response_offer):
+        user.output_handler.reject_distress_response_offer(distress_response_offer)

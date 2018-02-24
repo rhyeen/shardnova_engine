@@ -3,6 +3,8 @@
 
 import time
 from scripts.kill_switch import KillSwitch
+from scripts.classes.signals.distress_signal import DistressSignal
+from scripts.classes.exchange.request import Request
 
 
 class ScriptedUser(object):
@@ -40,3 +42,13 @@ class ScriptedUser(object):
         if self.__kill_switch.should_kill():
             return
         self.__interactor.set_course(self.__user, self.__drone, celestial_body_index)
+
+    def send_fuel_distress_signal(self, requested_fuel_amount):
+        request = Request()
+        request.set_fuel(amount=requested_fuel_amount)
+        self.__send_distress_signal(request)
+
+    def __send_distress_signal(self, request):
+        distress_signal = DistressSignal(self.__interactor.data_handler, self.__drone)
+        distress_signal.set_request(request)
+        self.__interactor.send_distress_signal(self.__user, self.__drone, distress_signal)

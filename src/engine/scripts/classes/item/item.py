@@ -16,6 +16,11 @@ class Item(ABC):
 
     @staticmethod
     @abstractmethod
+    def get_item_type(self):
+        raise NotImplementedError
+
+    @staticmethod
+    @abstractmethod
     def _get_max_durability():
         raise NotImplementedError
 
