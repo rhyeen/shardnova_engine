@@ -3,8 +3,8 @@
 
 import time
 from scripts.kill_switch import KillSwitch
-from scripts.classes.signals.distress_signal import DistressSignal
-from scripts.classes.signals.distress_response_offer import DistressResponseOffer
+from scripts.classes.signal.distress_signal import DistressSignal
+from scripts.classes.signal.distress_response_offer import DistressResponseOffer
 from scripts.classes.exchange.request import Request
 from scripts.classes.exchange.offer import Offer
 

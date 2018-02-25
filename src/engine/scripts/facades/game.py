@@ -25,7 +25,7 @@ class Game(object):
         self.universe = Universe(self.__data_handler)
         self.universe.load_file(game_file['universe'])
         self.npcs = Npcs(self.__data_handler)
-        self.npcs.load_file(game_file['npcs'])
+        self.npcs.load_file(game_file['npcs'], self.universe)
         self.users = Users(self.__data_handler)
         self.users.load_file(game_file['users'], self.universe)
 

@@ -20,6 +20,8 @@ class Universe(object):
 
     def get_galaxy(self, name):
         if not self.__galaxy_name_exists(name):
+            if self.__starting_galaxy.get_name() == name:
+                return self.__starting_galaxy
             raise ValueError('{0} is not found.'.format(name))
         index = self.__get_galaxy_index_named(name)
         return self.__get_galaxy(index)

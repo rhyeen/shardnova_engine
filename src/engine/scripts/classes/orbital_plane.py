@@ -2,117 +2,68 @@
 """
 
 
-class Node(object):
-    def __init__(self, celestial_body):
-        self.celestial_body = celestial_body
-        self.next_node = None
-        self.next_edge = None
-        self.prev_node = None
-        self.prev_edge = None
-
-    def __str__(self):
-        return str(self.celestial_body)
-
-
 class OrbitalPlane(object):
     def __init__(self):
-        self.first_node = None
-        self.last_node = None
+        self.__celestial_body_objects = []
 
     def get_distances(self, celestial_body):
-        node = self.__get_node(celestial_body)
-        prev_distance = 0
-        next_distance = 0
         distances = {}
-        current_node = node
-        while True:
-            distances[current_node.celestial_body.get_name()] = next_distance
-            current_node = self.__next(current_node)
-            if current_node is None:
-                break
-            next_distance += current_node.prev_edge
-        current_node = node
-        while True:
-            distances[current_node.celestial_body.get_name()] = prev_distance
-            current_node = self.__prev(current_node)
-            if current_node is None:
-                break
-            prev_distance += current_node.next_edge
+        distance_from_center = self.get_distance_from_center(celestial_body)
+        for celestial_body_object in self.__celestial_body_objects:
+            distance_from_given = abs(distance_from_center - celestial_body_object['distance_from_center'])
+            distances[celestial_body_object['celestial_body'].get_name()] = distance_from_given
         return distances
-
-    def __get_node(self, celestial_body):
-        if self.first_node is None:
-            return None
-        current_node = self.first_node
-        while current_node is not None:
-            if current_node.celestial_body.get_name() == celestial_body.get_name():
-                return current_node
-            current_node = self.__next(current_node)
-        raise ValueError('{0} does not exist in the orbital plane'.format(celestial_body))
-
-    def __next(self, current_node):
-        return current_node.next_node
-
-    def __prev(self, current_node):
-        return current_node.prev_node
 
     def get_celestial_bodies(self):
         celestial_bodies = []
-        current_node = self.first_node
-        while current_node is not None:
-            celestial_bodies.append(current_node.celestial_body)
-            current_node = self.__next(current_node)
+        for celestial_body_object in self.__celestial_body_objects:
+            celestial_bodies.append(celestial_body_object['celestial_body'])
         return celestial_bodies
 
     def get_celestial_body(self, name):
-        current_node = self.first_node
-        while current_node is not None:
-            if current_node.celestial_body.get_name() == name:
-                return current_node.celestial_body
-            current_node = self.__next(current_node)
+        index = self.__get_celestial_body_index(name)
+        return self.__celestial_body_objects[index]['celestial_body']
+
+    def get_distance_from_center(self, celestial_body):
+        index = self.__get_celestial_body_index(celestial_body.get_name())
+        return self.__celestial_body_objects[index]['distance_from_center']
+
+    def __get_celestial_body_index(self, name):
+        for index, celestial_body_object in enumerate(self.__celestial_body_objects):
+            celestial_body = celestial_body_object['celestial_body']
+            if celestial_body.get_name() == name:
+                return index
         raise ValueError('{0} does not exist in the orbital plane'.format(name))
 
-    def push(self, celestial_body, distance_from_last=0):
-        if self.first_node is None:
-            self.__initialize(celestial_body)
-            return
-        new_node = Node(celestial_body)
-        new_node.prev_node = self.last_node
-        new_node.prev_edge = distance_from_last
-        self.last_node.next_node = new_node
-        self.last_node.next_edge = distance_from_last
-        self.last_node = new_node
+    def push(self, celestial_body, distance_from_last=1):
+        if len(self.__celestial_body_objects) == 0:
+            distance_from_center = 0
+        else:
+            assert (distance_from_last > 1)
+            distance_from_center = self.__celestial_body_objects[-1]['distance_from_center'] + distance_from_last
+        self.__celestial_body_objects.append({
+            'celestial_body': celestial_body,
+            'distance_from_center': distance_from_center
+        })
 
-    def insert(self,
-               celestial_body,
-               previous_celestial_body,
-               distance_to_previous_celestial_body):
-        prev_node = self.__get_node(previous_celestial_body)
-        if not prev_node:
-            raise ValueError('Could not find the previous_celestial_body')
-        next_node = self.__next(prev_node)
-        if not next_node:
-            self.push(celestial_body, distance_to_previous_celestial_body)
-            return
-        prev_edge = prev_node.next_edge
-        if distance_to_previous_celestial_body > prev_edge:
-            raise ValueError('distance_to_previous_celestial_body ({0}) cannot be greater than '
-                             'the distance between previous_celestial_body\'s '
-                             'and the next celestial body ({1})'
-                             .format(distance_to_previous_celestial_body, prev_edge))
-        new_node = Node(celestial_body)
-        new_node.prev_node = prev_node
-        new_node.prev_edge = distance_to_previous_celestial_body
-        new_node.next_node = next_node
-        new_node.next_edge = prev_edge - distance_to_previous_celestial_body
-        prev_node.next_node = new_node
-        prev_node.next_edge = new_node.prev_edge
-        next_node.prev_node = new_node
-        next_node.prev_edge = new_node.next_edge
-
-    def __initialize(self, celestial_body):
-        self.first_node = Node(celestial_body)
-        self.last_node = self.first_node
+    def insert(self, celestial_body, distance_from_center=0):
+        assert(distance_from_center > 0)
+        if len(self.__celestial_body_objects) == 0:
+            distance_from_center = 0
+        insert_index = 0
+        while insert_index < len(self.__celestial_body_objects):
+            insert_index += 1
+            celestial_body_object = self.__celestial_body_objects[insert_index]
+            if distance_from_center < celestial_body_object['distance_from_center']:
+                break
+            if distance_from_center == celestial_body_object['distance_from_center']:
+                raise ValueError('Cannot insert celestial body with same distance from center of the system as {0}'
+                                 .format(celestial_body_object['celestial_body']))
+        celestial_body_object = {
+            'celestial_body': celestial_body,
+            'distance_from_center': distance_from_center
+        }
+        self.__celestial_body_objects.insert(insert_index, celestial_body_object)
 
     def get_distance_between_celestial_bodies(self, body1, body2):
         distances = self.get_distances(body1)

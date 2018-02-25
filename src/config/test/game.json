@@ -1,47 +1,45 @@
 {
     "npcs": [
         {
-            "character": {
-                "id": "npc1",
-                "bank": {
-                    "primaryAccount": "ufa",
-                    "blackMarketAccount": {},
-                    "universalFederationAccount": {}
-                },
-                "factionReputs": {
-                    "factionMap": [
-                        {
-                            "faction": {
-                                "type": "universal",
-                                "name": "factionA"
-                            },
-                            "reputation": 100
-                        }
-                    ]
-                },
-                "droneWarehouse": {
-                    "activeDrones": [
-                        {
-                            "type": "muleClassTanker",
-                            "id": "UF Rescuer",
-                            "inventory": {
-                                "type": "basic",
-                                "maxSlots": 4,
-                                "slots": []
-                            },
-                            "coordinates": {
-                                "galaxy": "galaxyS",
-                                "sector": "sectorS",
-                                "system": "systemS",
-                                "celestialBody": "beaconS",
-                                "course": null
-                            },
-                            "fuel": 100000
-                        }
-                    ],
-                    "inactiveDrones": [],
-                    "killedDrones": []
-                }
+            "id": "npc1",
+            "bank": {
+                "primaryAccount": "ufa",
+                "blackMarketAccount": {},
+                "universalFederationAccount": {}
+            },
+            "factionReputs": {
+                "factionMap": [
+                    {
+                        "faction": {
+                            "type": "universal",
+                            "name": "factionA"
+                        },
+                        "reputation": 100
+                    }
+                ]
+            },
+            "droneWarehouse": {
+                "activeDrones": [
+                    {
+                        "type": "muleClassTanker",
+                        "id": "UF Rescuer",
+                        "inventory": {
+                            "type": "basic",
+                            "maxSlots": 4,
+                            "slots": []
+                        },
+                        "coordinates": {
+                            "galaxy": "galaxyS",
+                            "sector": "sectorS",
+                            "system": "systemS",
+                            "celestialBody": "beaconS",
+                            "course": null
+                        },
+                        "fuel": 100000
+                    }
+                ],
+                "inactiveDrones": [],
+                "killedDrones": []
             }
         }
     ],

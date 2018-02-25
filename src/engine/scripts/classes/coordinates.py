@@ -57,7 +57,7 @@ class Coordinates(object):
         self.sector = self.galaxy.get_sector(game_file['sector'])
         self.system = self.sector.get_system(game_file['system'])
         if 'celestialBody' in game_file and game_file['celestialBody'] is not None:
-            celestial_body = self.sector.get_celestial_body(game_file['celestialBody'])
+            celestial_body = self.system.get_celestial_body(game_file['celestialBody'])
             self.set_celestial_body(celestial_body)
             return
         if drone is None:

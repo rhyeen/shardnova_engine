@@ -1,6 +1,7 @@
 """ Container for DroneWarehouse
 """
 from scripts.classes.drone.probe_drone import ProbeDrone
+from scripts.classes.drone.mule_class_tanker import MuleClassTanker
 
 
 class DroneWarehouse(object):
@@ -77,6 +78,8 @@ class DroneWarehouse(object):
             drone_type = drone_file['type']
             if drone_type == 'probe':
                 drone = ProbeDrone(self.__data_handler)
+            elif drone_type == 'muleClassTanker':
+                drone = MuleClassTanker(self.__data_handler)
             else:
                 raise ValueError('Drone of type "{0}" unsupported'.format(drone_type))
             drone.load_file(drone_file, universe)

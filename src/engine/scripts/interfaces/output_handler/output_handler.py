@@ -62,15 +62,15 @@ class OutputHandler(ABC):
         pass
 
     @abstractmethod
-    def distress_signal_offer_received(self, distress_signal_offer):
+    def distress_response_offer_received(self, distress_signal_offer):
         pass
 
     @abstractmethod
-    def distress_signal_offer_accepted(self, distress_signal):
+    def distress_response_offer_accepted(self, distress_signal):
         pass
 
     @abstractmethod
-    def distress_signal_offer_rejected(self, distress_signal):
+    def distress_response_offer_rejected(self, distress_signal):
         pass
 
     @abstractmethod
