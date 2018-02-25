@@ -38,11 +38,17 @@ class System(object):
     def get_celestial_body(self, name):
         return self.__orbital_plane.get_celestial_body(name)
 
+    def get_distance_from_center(self, celestial_body):
+        return self.__orbital_plane.get_distance_from_center(celestial_body)
+
     def get_distances(self, celestial_body):
         return self.__orbital_plane.get_distances(celestial_body)
 
     def get_distance_between_celestial_bodies(self, body1, body2):
         return self.__orbital_plane.get_distance_between_celestial_bodies(body1, body2)
+
+    def get_celestial_body_at_distance(self, distance_from_center):
+        return self.__orbital_plane.get_celestial_body_at_distance(distance_from_center)
 
     def generate(self):
         total = random.randint(1, self.max_celestial_bodies)
@@ -63,7 +69,7 @@ class System(object):
         self.__orbital_plane.push(beacon, 4)
 
     def get_tutorial_starting_point(self):
-        return self.__starting_factory
+        return self.__orbital_plane.get_distance_from_center(self.__starting_factory)
 
     def load_file(self, game_file):
         self.__name = game_file['name']

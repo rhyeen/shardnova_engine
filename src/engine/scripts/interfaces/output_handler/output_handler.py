@@ -30,11 +30,7 @@ class OutputHandler(ABC):
         pass
 
     @abstractmethod
-    def show_on_course_map(self, galaxy, sector, system, source, destination):
-        pass
-
-    @abstractmethod
-    def show_map(self, galaxy, sector, system, celestial_body):
+    def show_map(self, coordinates):
         pass
 
     @abstractmethod

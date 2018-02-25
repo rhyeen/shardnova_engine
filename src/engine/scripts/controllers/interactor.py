@@ -28,28 +28,19 @@ class Interactor(object):
         return user
 
     def get_map(self, user, drone):
-        galaxy = drone.coordinates.galaxy
-        sector = drone.coordinates.sector
-        system = drone.coordinates.system
-        if drone.coordinates.on_course():
-            source = drone.coordinates.get_course().get_source()
-            destination = drone.coordinates.get_course().get_destination()
-            user.output_handler.show_on_course_map(galaxy, sector, system, source, destination)
-        else:
-            celestial_body = drone.coordinates.get_celestial_body()
-            user.output_handler.show_map(galaxy, sector, system, celestial_body)
+        user.output_handler.show_map(drone.coordinates)
 
     def set_course(self, user, drone, destination_index):
         celestial_body = self.__get_celestial_body(drone, destination_index)
         if celestial_body is None:
             user.output_handler.invalid_index(destination_index)
-        course = Course(drone, celestial_body)
+            return
+        course = Course(drone, self.__get_celestial_body_distance(drone, celestial_body))
         fuel_use = course.get_required_fuel_for_course()
         if fuel_use > drone.fuel:
             user.output_handler.insufficient_fuel(celestial_body, fuel_use, drone.fuel)
             return
         drone.coordinates.set_course(course)
-        celestial_body = course.get_destination()
         distance_to_destination = course.get_distance_to_destination()
         distance_per_tick = course.get_distance_per_tick()
         ticks_to_finished = distance_to_destination / distance_per_tick
@@ -57,6 +48,9 @@ class Interactor(object):
             user.output_handler.already_at_course_desintation(celestial_body)
             return
         user.output_handler.on_course(fuel_use, drone.fuel, celestial_body, distance_to_destination, ticks_to_finished)
+
+    def __get_celestial_body_distance(self, drone, celestial_body):
+        return drone.coordinates.system.get_distance_from_center(celestial_body)
 
     def __get_celestial_body(self, drone, destination_index):
         if destination_index < 0:

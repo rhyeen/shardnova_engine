@@ -47,25 +47,20 @@ class ConsoleOutputHandler(OutputHandler):
     def no_course(self):
         self.__report('No directive set.')
 
-    def show_on_course_map(self, galaxy, sector, system, source, destination):
-        message = self.__get_basic_map(galaxy, sector, system)
-        message += 'On course from {0} to {1}'.format(source, destination)
+    def show_map(self, coordinates):
+        message = self.__get_basic_map(coordinates)
+        message += '{0}'.format(coordinates)
         self.__report(message)
 
     @staticmethod
-    def __get_basic_map(galaxy, sector, system):
+    def __get_basic_map(coordinates):
         message = ('{0}\n'
                    '{1}\n'
                    '{2}\n'
-                   'Destinations within system:\n').format(galaxy, sector, system)
-        for index, celestial_body in enumerate(system.get_celestial_bodies()):
+                   'Destinations within system:\n').format(coordinates.galaxy, coordinates.sector, coordinates.system)
+        for index, celestial_body in enumerate(coordinates.system.get_celestial_bodies()):
             message += '{0}: {1}\n'.format(index, celestial_body)
         return message
-
-    def show_map(self, galaxy, sector, system, celestial_body):
-        message = self.__get_basic_map(galaxy, sector, system)
-        message += 'Currently orbiting {0}'.format(celestial_body)
-        self.__report(message)
 
     def invalid_command(self):
         self.__report('Invalid command')

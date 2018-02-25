@@ -71,3 +71,10 @@ class OrbitalPlane(object):
             raise ValueError('second celestial body, {0} not within orbital plane'
                              .format(body2))
         return distances[body2.get_name()]
+
+    def get_celestial_body_at_distance(self, distance_from_center):
+        assert(distance_from_center >= 0)
+        for celestial_body_object in self.__celestial_body_objects:
+            if distance_from_center == celestial_body_object['distance_from_center']:
+                return celestial_body_object['celestial_body']
+        return None

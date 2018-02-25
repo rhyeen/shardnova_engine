@@ -32,7 +32,7 @@
                             "galaxy": "galaxyS",
                             "sector": "sectorS",
                             "system": "systemS",
-                            "celestialBody": "beaconS",
+                            "distanceFromSystemCenter": 5,
                             "course": null
                         },
                         "fuel": 100000
@@ -202,11 +202,9 @@
                                 "galaxy": "galaxy1",
                                 "sector": "sector1a",
                                 "system": "system1a1",
-                                "celestialBody": null,
+                                "distanceFromSystemCenter": 5,
                                 "course": {
-                                    "source": "cb1a1a",
-                                    "destination": "cb1a1b",
-                                    "distanceToDestination": 5
+                                    "targetDistanceFromSystemCenter": 10
                                 }
                             },
                             "fuel": 0

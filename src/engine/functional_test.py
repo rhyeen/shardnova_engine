@@ -131,7 +131,7 @@ class MyFunctionalTester(FunctionalTester):
         assert('1: Planet: planetS' in output_records[3])
         assert('2: startingFactoryS' in output_records[3])
         assert('3: Beacon: beaconS' in output_records[3])
-        assert('On course from startingFactoryS to Star: starS' in output_records[3])
+        assert('On course to Star: starS' in output_records[3])
         self.__get_command('set_course')(3)
         assert (len(output_records) == 5)
         assert ('On course to Beacon: beaconS' in output_records[4])
