@@ -2,6 +2,7 @@
 """
 from scripts.facades.user import User
 from scripts.classes.course import Course
+from scripts.classes.signal.distress_signal import DistressSignal
 
 
 class Interactor(object):
@@ -89,3 +90,8 @@ class Interactor(object):
 
     def reject_distress_response_offer(self, user, distress_response_offer):
         user.output_handler.reject_distress_response_offer(distress_response_offer)
+
+    def handle_dropped_distress_signal(self, user, distress_signal_id):
+        distress_signal = DistressSignal(None, None)
+        distress_signal.set_id(distress_signal_id)
+        user.output_handler.distress_signal_dropped(distress_signal)

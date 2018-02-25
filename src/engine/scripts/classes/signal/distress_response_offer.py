@@ -9,7 +9,6 @@ class DistressResponseOffer(Signal):
         self._offer = None
         self.accepted = False
         self.rejected = False
-        self.droppped = False
         self.distress_signal = distress_signal
         super().__init__(data_handler, drone)
 

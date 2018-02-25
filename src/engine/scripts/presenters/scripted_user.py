@@ -4,7 +4,9 @@
 import time
 from scripts.kill_switch import KillSwitch
 from scripts.classes.signals.distress_signal import DistressSignal
+from scripts.classes.signals.distress_response_offer import DistressResponseOffer
 from scripts.classes.exchange.request import Request
+from scripts.classes.exchange.offer import Offer
 
 
 class ScriptedUser(object):
@@ -18,8 +20,9 @@ class ScriptedUser(object):
         self.__kill_switch = kill_switch
 
     def basic_commands(self):
-        # self.get_map()
-        # self.check_course()
+        """ Just a simple set of commands to ensuring the user
+            runs correctly.
+        """
         self.set_course(0)
         while True:
             self.check_course()
@@ -51,4 +54,21 @@ class ScriptedUser(object):
     def __send_distress_signal(self, request):
         distress_signal = DistressSignal(self.__interactor.data_handler, self.__drone)
         distress_signal.set_request(request)
-        self.__interactor.send_distress_signal(self.__user, self.__drone, distress_signal)
+        self.__interactor.send_distress_signal(self.__user, distress_signal)
+
+    def send_fuel_response_offer(self, distress_signal_id, cost_per_fuel, max_fuel_amount=None):
+        offer = Offer()
+        offer.set_fuel(amount=max_fuel_amount, cost_per_fuel=cost_per_fuel)
+        distress_signal = self.__interactor.get_signal(distress_signal_id)
+        if distress_signal is None:
+            self.__handle_dropped_distress_signal(distress_signal_id)
+            return
+        self.__send_distress_response_offer(distress_signal, offer)
+
+    def __send_distress_response_offer(self, distress_signal, offer):
+        distress_response_offer = DistressResponseOffer(self.__interactor.data_handler, self.__drone, distress_signal)
+        distress_response_offer.set_offer(offer)
+        self.__interactor.send_distress_response_offer(self.__user, distress_response_offer)
+
+    def __handle_dropped_distress_signal(self, distress_signal_id):
+        self.__interactor.handle_dropped_distress_signal(self.__user, distress_signal_id)
