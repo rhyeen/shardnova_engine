@@ -1,0 +1,28 @@
+Id,Name,Shape Library,Page ID,Contained By,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1
+1,Page,,,,,,,,Page 1
+2,Text,Default,1,,,,,,Thread A
+3,Text,Default,1,,,,,,Thread B
+4,Process,Flowchart Shapes,1,,,,,,Console (Tick)
+5,Process,Flowchart Shapes,1,,,,,,User Controller
+6,Process,Flowchart Shapes,1,,,,,,Game
+7,Process,Flowchart Shapes,1,,,,,,Worker
+8,Process,Flowchart Shapes,1,,,,,,Pusher
+9,Process,Flowchart Shapes,1,,,,,,Interactor
+10,Text,Default,1,,,,,,Thread A
+11,Process,Flowchart Shapes,1,,,,,,User Controller
+12,Process,Flowchart Shapes,1,,,,,,Worker
+13,Process,Flowchart Shapes,1,,,,,,Console (User)
+14,Process,Flowchart Shapes,1,,,,,,Pusher
+15,Direct Access Storage (Hard Disk),Flowchart Shapes,1,,,,,,Queue
+16,Line,,1,,6,4,None,Arrow,
+17,Line,,1,,6,9,None,Arrow,
+18,Line,,1,,9,5,None,Arrow,
+19,Line,,1,,5,8,None,Arrow,
+20,Line,,1,,7,5,None,Arrow,
+21,Line,,1,,12,11,None,Arrow,
+22,Line,,1,,11,14,None,Arrow,
+23,Line,,1,,11,13,Arrow,Arrow,
+24,Line,,1,,14,15,None,Arrow,
+25,Line,,1,,8,15,None,Arrow,
+26,Line,,1,,15,12,None,Arrow,
+27,Line,,1,,15,7,None,Arrow,

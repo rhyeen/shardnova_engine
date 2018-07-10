@@ -1,0 +1,43 @@
+Id,Name,Shape Library,Page ID,Contained By,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1
+1,Page,,,,,,,,Page 1
+2,Decision,Flowchart Shapes,1,,,,,,Has trade
+3,Decision,Flowchart Shapes,1,,,,,,Show Prices
+4,Terminator,Flowchart Shapes,1,,,,,,Show inventory with sell prices
+5,Terminator,Flowchart Shapes,1,,,,,,Show goods with buy prices
+6,Decision,Flowchart Shapes,1,,,,,,Trade
+7,Terminator,Flowchart Shapes,1,,,,,,"Remove Item, Add to Trader, Gain Credit, or Error"
+8,Terminator,Flowchart Shapes,1,,,,,,"Add Item, Remove from Trader, Loss Credit, or Error"
+9,Decision,Flowchart Shapes,1,,,,,,Check Markets
+10,Decision,Flowchart Shapes,1,,,,,,Repair Drone
+11,Decision,Flowchart Shapes,1,,,,,,Quest
+12,Terminator,Flowchart Shapes,1,,,,,,Turn in Quest
+13,Terminator,Flowchart Shapes,1,,,,,,Show available Fractions:quests
+14,Terminator,Flowchart Shapes,1,,,,,,Event: Reached Cel. Body
+15,Decision,Flowchart Shapes,1,,,,,,Dock
+16,Decision,Flowchart Shapes,1,,,,,,Enable Transponder
+17,Decision,Flowchart Shapes,1,,,,,,Dock at a satellite station or on planet
+18,Decision,Flowchart Shapes,1,,,,,,Uninhabited planet
+19,Decision,Flowchart Shapes,1,,,,,,Send probe
+20,Terminator,Flowchart Shapes,1,,,,,,Survey area
+21,Line,,1,,15,2,None,Arrow,
+22,Line,,1,,3,4,None,Arrow,Sell Prices
+23,Line,,1,,3,5,None,Arrow,Buy Prices
+24,Line,,1,,3,6,None,Arrow,No
+25,Line,,1,,6,7,None,Arrow,Sell
+26,Line,,1,,6,8,None,Arrow,Buy
+27,Line,,1,,2,9,None,Arrow,Yes
+28,Line,,1,,9,3,None,Arrow,UF
+29,Line,,1,,9,3,None,Arrow,Black Market
+30,Line,,1,,9,3,None,Arrow,One-off seller
+31,Line,,1,,15,10,None,Arrow,
+32,Line,,1,,15,11,None,Arrow,
+33,Line,,1,,11,12,None,Arrow,Finished
+34,Line,,1,,11,13,None,Arrow,Check quests
+35,Line,,1,,16,15,None,Arrow,Yes
+36,Line,,1,,16,15,None,Arrow,Force Dock
+37,Line,,1,,14,17,None,Arrow,
+38,Line,,1,,17,16,None,Arrow,Yes
+39,Line,,1,,17,18,None,Arrow,No
+40,Line,,1,,18,19,None,Arrow,Yes
+41,Line,,1,,18,17,None,Arrow,No
+42,Line,,1,,19,20,None,Arrow,Land and Survey
